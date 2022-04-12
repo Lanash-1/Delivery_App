@@ -1,18 +1,18 @@
 Usecases / functionalities of the app.
 
 Delivery app: users can order food and groceries with this app.
-delivery partners deliver the ordered items and get paid
-restaurants prepare the food and transfer to the delivery partners
+restaurants prepare the food and transfer to the delivery partners.
+delivery partners deliver the ordered items and get paid.
 
 Customer: 
 
-1.register / login
+1.signup / login
 2. forgot password
 3. select between food or groceries
 4. select items
 5. checkout
-6. payment
-7. place order
+6. place order
+7. payment
 8. cancel order
 9. give rating and feedback for delivery partner and restaurant
 10. tip the driver
@@ -23,18 +23,18 @@ Delivery partner:
 1. register / login
 2. forgot password
 3. accept order
-4. cancel order
-5. get customer details
-6. pick up details
-7. delivery details
-8. rewards for completing orders
-9. get pay details per delivery
-10. get paid by every weekend
-11. link bank account details
+4. skip order
+5. pick up details
+6. delivery details
+7. rewards for completing orders
+8. get pay details per delivery
+9. get paid by every weekend
+10. withdraw amount earned to bankaccount
 
 Restaurant partner:
 
-1. get order / accept order
-2. prepare order
-3. get delivery partner details who is going to pick the item
-4. complete order by giving the item to pick up person.
+1. restaurant login
+2. change item availability
+3. accept order
+4. get delivery partner details
+5. complete order
