@@ -28,6 +28,13 @@ class Card implements PaymentMethod{
 	}
 }
 
+class Withdraw{
+	void withdraw(int amount, String accountNumber) {
+		System.out.println("Transaction success.");
+		System.out.println("From: Company\nTo: "+accountNumber);
+	}
+}
+
 class CustomerProfile{
 	String username;
 	String address;
@@ -47,6 +54,22 @@ class CustomerProfile{
 	}
 }
 
+class PartnerProfile{
+	String name;
+	String mobileNo;
+	String vehicleNo;
+	String partnerId;
+	int earnings = 10;
+	
+	void showProfile() {
+		System.out.println("Partner ID: "+partnerId);
+		System.out.println("Name: " + name);
+		System.out.println("Mobile number: " + mobileNo);
+		System.out.println("Vehicle Number: " + vehicleNo);
+		System.out.println("Earning: " + earnings);
+	}
+}
+
 class Grocery{
 	int productId;
 	String productName;
@@ -59,6 +82,18 @@ class GroceryOrder{
 	String customerName;
 	String customerNumber;
 	String address;
+	boolean paid;
+}
+
+class ViewOrder{
+	void displayOrder(GroceryOrder groceryOrder) {
+		GroceryOrder order = groceryOrder;
+			System.out.println(order.grocery.productId+": "+order.grocery.productName+", Rs "+order.grocery.productPrice);
+			System.out.println("Quantity: "+order.quantity);
+			System.out.println("Customer Name: "+order.customerName);
+			System.out.println("Customer Number: "+order.customerNumber);
+			System.out.println("Delivery location: "+order.address);
+	}
 }
 
 public class Main {
@@ -91,6 +126,11 @@ public class Main {
 		
 		ArrayList<GroceryOrder> groceryOrderList = new ArrayList<>();
 		GroceryOrder grocery;
+		
+		String partnerId, partnerPassword;
+		Map<String, String> partnerLoginDetails= new HashMap<String, String>();
+		PartnerProfile partner;
+		Map<String, PartnerProfile> partnerProfile = new HashMap<String, PartnerProfile>();
 		// end of block
 		while(true) {		
 			System.out.println("1. Cutomer\n2. Delivery Partner\n3. Restaurant partner\n4. Close app");
@@ -155,6 +195,7 @@ public class Main {
 					break;
 				default:
 					System.out.println("Exit");
+					return;
 				}
 				
 				//---------- end of customer login or signup ---------------
@@ -173,13 +214,52 @@ public class Main {
 						int selectedProduct = sc.nextInt();
 						System.out.print("Enter quantity: ");
 						int productQuantity = sc.nextInt();
-						grocery = new GroceryOrder();
-						grocery.grocery = groceryList.get(selectedProduct);
-						grocery.quantity = productQuantity;
-						grocery.address = customerProfile.get(customerUserName).address;
-						grocery.customerName = customerProfile.get(customerUserName).username;
-						grocery.customerNumber = customerProfile.get(customerUserName).mobileNo;
-						groceryOrderList.add(grocery);
+						System.out.println("1. Pay now\n2. Cash on delivery");
+						choice = sc.nextInt();
+						switch(choice) {
+						case 1:
+							System.out.println("1. Card\n2. Upi");
+							choice = sc.nextInt();
+							sc.nextLine();
+							PaymentMethod method;
+							switch(choice) {
+							case 1:
+								System.out.print("Enter card number: ");
+								String cardNumber = sc.nextLine();
+								method = new Card();
+								method.pay(cardNumber, groceryList.get(selectedProduct-1).productPrice * productQuantity);
+								break;
+							case 2:
+								System.out.print("Enter UPI Id: ");
+								String UpiId = sc.nextLine();
+								method = new Card();
+								method.pay(UpiId, groceryList.get(selectedProduct-1).productPrice * productQuantity);
+								break;
+							default:
+								System.out.println("Select valid payment option");
+							}
+							grocery = new GroceryOrder();
+							grocery.grocery = groceryList.get(selectedProduct-1);
+							grocery.quantity = productQuantity;
+							grocery.address = customerProfile.get(customerUserName).address;
+							grocery.customerName = customerProfile.get(customerUserName).username;
+							grocery.customerNumber = customerProfile.get(customerUserName).mobileNo;
+							grocery.paid = true;
+							groceryOrderList.add(grocery);
+							break;
+						case 2:
+							grocery = new GroceryOrder();
+							grocery.grocery = groceryList.get(selectedProduct-1);
+							grocery.quantity = productQuantity;
+							grocery.address = customerProfile.get(customerUserName).address;
+							grocery.customerName = customerProfile.get(customerUserName).username;
+							grocery.customerNumber = customerProfile.get(customerUserName).mobileNo;
+							grocery.paid = false;
+							groceryOrderList.add(grocery);
+							break;
+						default:
+							System.out.println("Select any payment option");
+						}
 						break;
 					case 3:
 						if(customerProfile.get(customerUserName).isMember) {
@@ -251,15 +331,136 @@ public class Main {
 				}
 				break;
 			case 2: // delivery partner
-				
+				System.out.println("1. Login\n2. Register");
+				choice = sc.nextInt();
+				sc.nextLine();
+				switch(choice) {
+				case 1: // Delivery partner login
+					System.out.print("Enter Partner ID: ");
+					partnerId = sc.nextLine();
+					System.out.print("Enter password: ");
+					partnerPassword = sc.nextLine();
+					if(partnerLoginDetails.containsKey(partnerId)) {
+						if(partnerLoginDetails.get(partnerId).equals(partnerPassword)) {
+							System.out.println("Welcome back");
+						}else {
+							System.out.println("1. Forgot password\n2. exit");
+							choice = sc.nextInt();
+							switch(choice) {
+							case 1: // forgot password
+								System.out.println("Change Password\nPartner ID: "+partnerId);
+								System.out.print("Enter new password: ");
+								partnerPassword = sc.nextLine();
+								System.out.print("Confirm new password: ");
+								confirm = sc.nextLine();
+								if(partnerPassword == confirm) {
+									partnerLoginDetails.put(partnerId, partnerPassword);
+									System.out.println("Password changed successfully");
+								}else {
+									System.out.println("Password not matching Try again.");
+									return;
+								}
+								break;
+							case 2: // Exit
+								System.out.println("Exit");
+								return;
+							}
+						}
+					}else {
+						System.out.println("invalid partner ID. Try again");
+						return;
+					}
+					break;
+				case 2: // Delivery partner signup
+					partner = new PartnerProfile();
+					System.out.print("Enter FullName: ");
+					String partnerName = sc.nextLine();
+					partner.name = partnerName;
+					System.out.print("Enter password: ");
+					partnerPassword = sc.nextLine();
+					System.out.print("Create partner Id: ");
+					partnerId = sc.nextLine();
+					partner.partnerId = partnerId;
+					partnerLoginDetails.put(partnerId, partnerPassword);
+					System.out.print("Enter Vehicle Number: ");
+					partner.vehicleNo = sc.nextLine();
+					System.out.print("Enter mobile number: ");
+					partner.mobileNo = sc.nextLine();
+					partnerProfile.put(partnerId, partner);
+					System.out.println("Signed up");
+					break;
+				default:
+					System.out.println("Exit");
+					return;
+				}
+				boolean partnerLogout = false;
+				while(!partnerLogout) {
+					System.out.println("1.View Food order\n2. View Grocery Order\n3. View Profile\n4. Withdraw Earnings\n5. logout");
+					choice = sc.nextInt();
+					switch(choice) {
+					case 1: // view food order
+						break;
+					case 2: // view grocery order
+						ViewOrder viewOrders = new ViewOrder();
+						viewOrders.displayOrder(groceryOrderList.get(0));
+						System.out.println("1. Accept order\n2. skip order");
+						choice = sc.nextInt();
+						switch(choice) {
+						case 1: // accept order
+							System.out.println("Order accepted");
+							System.out.println("-Picked up order");
+							System.out.println("- -Delivered");
+							if(!groceryOrderList.get(0).paid) {
+								System.out.println("- - -Amount collected");
+							}else {
+								System.out.println("- - -Amount paid online");
+							}
+							partnerProfile.get(partnerId).earnings += (groceryOrderList.get(0).quantity * groceryOrderList.get(0).grocery.productPrice);
+							groceryOrderList.remove(0);
+							break;
+						case 2: // skip order
+							System.out.println("Order skipped");
+							break;
+						default:
+							System.out.println("Either accept or skip");
+						}
+						break;
+					case 3: // view partner profile
+						partnerProfile.get(partnerId).showProfile();
+						break;
+					case 4: // withdraw earnings
+						System.out.print("Enter amount to withdraw: ");
+						int amount = sc.nextInt();
+						sc.nextLine();
+						if(amount <= partnerProfile.get(partnerId).earnings) {
+							System.out.print("Enter account number: ");
+							String accountNumber = sc.nextLine();
+							Withdraw withdraw = new Withdraw();
+							withdraw.withdraw(amount, accountNumber);
+							PartnerProfile dpprofile = partnerProfile.get(partnerId);
+							dpprofile.earnings = dpprofile.earnings - amount;
+							partnerProfile.put(partnerId, dpprofile);
+						}else {
+							System.out.println("Requested amount is more than available balance");
+						}
+						break;
+					case 5:
+						partnerLogout = true;
+						System.out.println("Logged out.");
+						break;
+					default:
+						System.out.println("Select only available features");
+					}
+				}
 				break;
-			case 3: // restaurant partner
+			case 3: // restaurant
 				break;
 			case 4:
-				System.out.println("Closing APP");
+				System.out.println("APP closed");
 				return;
 			default:
 				System.out.println("Exit");
+				return;
 			}
 		}
 	}
