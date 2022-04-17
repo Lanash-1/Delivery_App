@@ -84,8 +84,7 @@ class GroceryOrder{
 	String address;
 	boolean paid;
 }
-
-class ViewOrder{
+class ViewGroceryOrder{
 	void displayOrder(GroceryOrder groceryOrder) {
 		GroceryOrder order = groceryOrder;
 			System.out.println(order.grocery.productId+": "+order.grocery.productName+", Rs "+order.grocery.productPrice);
@@ -96,10 +95,85 @@ class ViewOrder{
 	}
 }
 
+class Food{
+	String foodName;
+	int foodId;
+	int foodCost;
+}
+
+class Restaurant{
+	String restaurantName;
+	String restaurantLocation;
+	int restaurantId;
+	String restaurantPassword;
+	ArrayList<Food> menu;
+}
+
+class FoodOrder{
+	Food food;
+	int quantity;
+	String customerName;
+	String CustomerNumber;
+	String customerAddress;
+	boolean paid;
+	int restaurantId;
+	String restaurantName;
+	String restaurantLocation;
+}
+
 public class Main {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		// declaration and initialization
+		
+		ArrayList<FoodOrder> orderedFood = new ArrayList<FoodOrder>();
+		ArrayList<FoodOrder> foodToDeliver = new ArrayList<FoodOrder>();
+		FoodOrder foodOrder;
+		Food foodSelected;
+		
+		int restaurantId;
+		String restaurantPassword;
+		Map<Integer, Restaurant> restaurantDetails = new HashMap<Integer, Restaurant>();
+		ArrayList<Food> localMenu = new ArrayList<Food>();
+		Food food1 = new Food();
+		food1.foodId = 1;
+		food1.foodName = "Dosa";
+		food1.foodCost = 20;
+		localMenu.add(food1);
+		Food food2 = new Food();
+		food2.foodId = 2;
+		food2.foodName = "Poori";
+		food2.foodCost = 30;
+		localMenu.add(food2);
+		Food food3 = new Food();
+		food3.foodId = 3;
+		food3.foodName = "Fried Rice";
+		food3.foodCost = 100;
+		localMenu.add(food3);
+		
+		Restaurant restaurant1 = new Restaurant();
+		restaurant1.menu = localMenu;
+		restaurant1.restaurantId = 1;
+		restaurant1.restaurantLocation = "chennai";
+		restaurant1.restaurantName = "A2B";
+		restaurant1.restaurantPassword = "123";
+		restaurantDetails.put(1, restaurant1);
+		Restaurant restaurant2 = new Restaurant();
+		restaurant2.menu = localMenu;
+		restaurant2.restaurantId = 2;
+		restaurant2.restaurantLocation = "chennai";
+		restaurant2.restaurantName = "saravana bhavan";
+		restaurant2.restaurantPassword = "123";
+		restaurantDetails.put(2, restaurant2);
+		Restaurant restaurant3 = new Restaurant();
+		restaurant3.menu = localMenu;
+		restaurant3.restaurantId = 3;
+		restaurant3.restaurantLocation = "chennai";
+		restaurant3.restaurantName = "Kfc";
+		restaurant3.restaurantPassword = "123";
+		restaurantDetails.put(3, restaurant3);
+		
+		
 		int choice;
 		Map<String, String> customerLoginDetails= new HashMap<String, String>();
 		String customerUserName = "";
@@ -131,6 +205,7 @@ public class Main {
 		Map<String, String> partnerLoginDetails= new HashMap<String, String>();
 		PartnerProfile partner;
 		Map<String, PartnerProfile> partnerProfile = new HashMap<String, PartnerProfile>();
+		
 		// end of block
 		while(true) {		
 			System.out.println("1. Cutomer\n2. Delivery Partner\n3. Restaurant partner\n4. Close app");
@@ -205,13 +280,91 @@ public class Main {
 					choice = sc.nextInt();
 					switch(choice) {
 					case 1: // order food section
-						break;
+						System.out.println("Select restaurant");
+						for(int i=1; i<=3; i++) {
+							System.out.println(i+" "+restaurantDetails.get(i).restaurantName);
+						}
+						int selectedRestaurant = sc.nextInt();
+						if(restaurantDetails.containsKey(selectedRestaurant)) {
+							for(Food food : restaurantDetails.get(selectedRestaurant).menu) {
+								System.out.println(food.foodId+". "+food.foodName+" - Rs."+food.foodCost);
+							}
+							int selectedFood = sc.nextInt();
+							if(selectedFood <= restaurantDetails.get(selectedRestaurant).menu.size() && selectedFood >0) {
+								foodSelected = restaurantDetails.get(selectedRestaurant).menu.get(selectedFood-1);
+								System.out.print("Enter Quantity: ");
+								int foodQuantity = sc.nextInt();
+								System.out.println("1. Pay now\n2. Cash on delivery");
+								choice = sc.nextInt();
+								switch(choice) {
+								case 1:
+									System.out.println("1. Card\n2. Upi");
+									choice = sc.nextInt();
+									sc.nextLine();
+									PaymentMethod method;
+									switch(choice) {
+									case 1:
+										System.out.print("Enter card number: ");
+										String cardNumber = sc.nextLine();
+										method = new Card();
+										method.pay(cardNumber, foodSelected.foodCost * foodQuantity);
+										break;
+									case 2:
+										System.out.print("Enter UPI Id: ");
+										String UpiId = sc.nextLine();
+										method = new Card();
+										method.pay(UpiId, foodSelected.foodCost * foodQuantity);
+										break;
+									default:
+										System.out.println("Select valid payment option");
+									}
+									foodOrder = new FoodOrder();
+									foodOrder.food = foodSelected;
+									foodOrder.quantity = foodQuantity;
+									foodOrder.customerAddress = customerProfile.get(customerUserName).address;
+									foodOrder.customerName = customerProfile.get(customerUserName).username;
+									foodOrder.CustomerNumber = customerProfile.get(customerUserName).mobileNo;
+									foodOrder.paid = true;
+									foodOrder.restaurantName = restaurantDetails.get(selectedRestaurant).restaurantName;
+									foodOrder.restaurantLocation = restaurantDetails.get(selectedRestaurant).restaurantLocation;
+									foodOrder.restaurantId = restaurantDetails.get(selectedRestaurant).restaurantId;
+									orderedFood.add(foodOrder);
+									break;
+								case 2:
+									foodOrder = new FoodOrder();
+									foodOrder.food = foodSelected;
+									foodOrder.quantity = foodQuantity;
+									foodOrder.customerAddress = customerProfile.get(customerUserName).address;
+									foodOrder.customerName = customerProfile.get(customerUserName).username;
+									foodOrder.CustomerNumber = customerProfile.get(customerUserName).mobileNo;
+									foodOrder.paid = false;
+									foodOrder.restaurantName = restaurantDetails.get(selectedRestaurant).restaurantName;
+									foodOrder.restaurantLocation = restaurantDetails.get(selectedRestaurant).restaurantLocation;
+									foodOrder.restaurantId = restaurantDetails.get(selectedRestaurant).restaurantId;
+									orderedFood.add(foodOrder);
+									break;
+								default:
+									System.out.println("Select any payment option");
+								}
+								break;
+							}else {
+								System.out.println("Select only available food");
+								break;
+							}
+						}else {
+							System.out.println("Option not available");
+							break;
+						}
 					case 2: // order groceries section
 						for(Grocery item : groceryList) {
 							System.out.println(item.productId+": "+item.productName+", Rs "+item.productPrice);
 						}
 						System.out.println("Select product");
 						int selectedProduct = sc.nextInt();
+						if(selectedProduct > groceryList.size() || selectedProduct < 1) {
+							System.out.println("Select only available items");
+							break;
+						}
 						System.out.print("Enter quantity: ");
 						int productQuantity = sc.nextInt();
 						System.out.println("1. Pay now\n2. Cash on delivery");
@@ -399,9 +552,35 @@ public class Main {
 					choice = sc.nextInt();
 					switch(choice) {
 					case 1: // view food order
+						if(foodToDeliver.size() < 1) {
+							System.out.println("Currently no orders");
+							break;
+						}
+						System.out.println(foodToDeliver.get(0).restaurantName+" - "+foodToDeliver.get(0).restaurantLocation);
+						System.out.println("1. Accept order\n2. skip order");
+						choice = sc.nextInt();
+						switch(choice) {
+						case 1: // accept food order
+							System.out.println("Order accepted");
+							System.out.println("-Picked up order");
+							System.out.println("- -Delivered to customer");
+							if(!foodToDeliver.get(0).paid) {
+								System.out.println("- - -Amount collected");
+							}else {
+								System.out.println("- - -Amount paid online");
+							}
+							partnerProfile.get(partnerId).earnings += (foodToDeliver.get(0).quantity * foodToDeliver.get(0).food.foodCost);
+							foodToDeliver.remove(0);
+							break;
+						case 2: // skip order
+							System.out.println("Order skipped");
+							break;
+						default:
+							System.out.println("Either accept or skip");
+						}
 						break;
 					case 2: // view grocery order
-						ViewOrder viewOrders = new ViewOrder();
+						ViewGroceryOrder viewOrders = new ViewGroceryOrder();
 						viewOrders.displayOrder(groceryOrderList.get(0));
 						System.out.println("1. Accept order\n2. skip order");
 						choice = sc.nextInt();
@@ -454,6 +633,61 @@ public class Main {
 				}
 				break;
 			case 3: // restaurant
+				boolean logged = false;
+				System.out.println("Login");
+				System.out.print("Enter restaurant Id: ");
+				restaurantId = sc.nextInt();
+				if(restaurantDetails.containsKey(restaurantId)) {
+					sc.nextLine();
+					System.out.print("Enter Password: ");
+					restaurantPassword = sc.nextLine();
+					if(restaurantDetails.get(restaurantId).restaurantPassword.equals(restaurantPassword)) {
+						System.out.println("Welcome. Orders waiting for you.");
+						logged = true;
+						
+					}else {
+						System.out.println("Invalid password. contact our team to change password");
+					}
+				}else {
+					System.out.println("Not a partner. Send us a mail to join as a partner");
+					break;
+				}
+				while(logged) {
+					System.out.println("1. view order\n2. 2. Logout");
+					choice = sc.nextInt();
+					switch(choice) {
+					case 1:
+						if(orderedFood.size() < 1) {
+							System.out.println("No orders");
+							break;
+						}
+						int index = 0;
+						boolean available = false;
+						for(FoodOrder food : orderedFood) {
+							if(food.restaurantId == restaurantId) {
+								index = orderedFood.indexOf(food);
+								available = true;
+								break;
+							}
+						}
+						if(available) {
+							System.out.println(orderedFood.get(index).food.foodName+" - "+orderedFood.get(index).quantity);
+							System.out.println("-Preparing food");
+							System.out.println("- -Food ready to collect");
+							foodToDeliver.add(orderedFood.get(index));
+							orderedFood.remove(index);
+						}else {
+							System.out.println("No orders");
+						}
+						break;
+					case 2:
+						System.out.println("Logged out");
+						logged = false;
+						break;
+					default:
+						System.out.println("invalid option");
+					}
+				}
 				break;
 			case 4:
 				System.out.println("APP closed");
