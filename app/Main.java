@@ -4,71 +4,71 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-class Membership{
-	int price;
-	String benefits = "free delivery on all orders";
-	String type;
-}
+//class Membership{
+//	int price;
+//	String benefits = "free delivery on all orders";
+//	String type;
+//}
+//
+//interface PaymentMethod{
+//	void pay(String fromAccount, int amount);
+//}
+//
+//class Upi implements PaymentMethod{
+//	public void pay(String fromAccount, int amount) {
+//		System.out.println("Successfully paid: Rs" + amount);
+//		System.out.println("Amount received from upi id: "+ fromAccount);
+//	}
+//}
+//
+//class Card implements PaymentMethod{
+//	public void pay(String fromAccount, int amount) {
+//		System.out.println("Successfully paid: Rs" + amount);
+//		System.out.println("Amount received from card number: "+fromAccount);
+//	}
+//}
+//
+//class Withdraw{
+//	void withdraw(int amount, String accountNumber) {
+//		System.out.println("Transaction success.");
+//		System.out.println("From: Company\nTo: "+accountNumber);
+//	}
+//}
 
-interface PaymentMethod{
-	void pay(String fromAccount, int amount);
-}
-
-class Upi implements PaymentMethod{
-	public void pay(String fromAccount, int amount) {
-		System.out.println("Successfully paid: Rs" + amount);
-		System.out.println("Amount received from upi id: "+ fromAccount);
-	}
-}
-
-class Card implements PaymentMethod{
-	public void pay(String fromAccount, int amount) {
-		System.out.println("Successfully paid: Rs" + amount);
-		System.out.println("Amount received from card number: "+fromAccount);
-	}
-}
-
-class Withdraw{
-	void withdraw(int amount, String accountNumber) {
-		System.out.println("Transaction success.");
-		System.out.println("From: Company\nTo: "+accountNumber);
-	}
-}
-
-class CustomerProfile{
-	String username;
-	String address;
-	String mobileNo;
-	boolean isMember = false;
-	Membership membership;
-	
-	void showProfile() {
-		System.out.println("Username: " + username);
-		System.out.println("Mobile number: " + mobileNo);
-		System.out.println("Address: " + address);
-		if(isMember) {
-			System.out.println("Membership: "+ membership.type);
-		}else {
-			System.out.println("Buy membership to avail free delivery");
-		}
-	}
-}
-
-class PartnerProfile{
-	String name;
-	String mobileNo;
-	String vehicleNo;
-	String partnerId;
-	int earnings = 10;
-	
-	void showProfile() {
-		System.out.println("Partner ID: "+partnerId);
-		System.out.println("Name: " + name);
-		System.out.println("Mobile number: " + mobileNo);
-		System.out.println("Vehicle Number: " + vehicleNo);
-		System.out.println("Earning: " + earnings);
-	}
-}
+//class CustomerProfile{
+//	String username;
+//	String address;
+//	String mobileNo;
+//	boolean isMember = false;
+//	Membership membership;
+//	
+//	void showProfile() {
+//		System.out.println("Username: " + username);
+//		System.out.println("Mobile number: " + mobileNo);
+//		System.out.println("Address: " + address);
+//		if(isMember) {
+//			System.out.println("Membership: "+ membership.type);
+//		}else {
+//			System.out.println("Buy membership to avail free delivery");
+//		}
+//	}
+//}
+//
+//class PartnerProfile{
+//	String name;
+//	String mobileNo;
+//	String vehicleNo;
+//	String partnerId;
+//	int earnings = 0;
+//	
+//	void showProfile() {
+//		System.out.println("Partner ID: "+partnerId);
+//		System.out.println("Name: " + name);
+//		System.out.println("Mobile number: " + mobileNo);
+//		System.out.println("Vehicle Number: " + vehicleNo);
+//		System.out.println("Earning: " + earnings);
+//	}
+//}
 
 class Grocery{
 	int productId;
@@ -84,6 +84,7 @@ class GroceryOrder{
 	String address;
 	boolean paid;
 }
+
 class ViewGroceryOrder{
 	void displayOrder(GroceryOrder groceryOrder) {
 		GroceryOrder order = groceryOrder;
@@ -95,31 +96,31 @@ class ViewGroceryOrder{
 	}
 }
 
-class Food{
-	String foodName;
-	int foodId;
-	int foodCost;
-}
+//class Food{
+//	String foodName;
+//	int foodId;
+//	int foodCost;
+//}
 
-class Restaurant{
-	String restaurantName;
-	String restaurantLocation;
-	int restaurantId;
-	String restaurantPassword;
-	ArrayList<Food> menu;
-}
+//class Restaurant{
+//	String restaurantName;
+//	String restaurantLocation;
+//	int restaurantId;
+//	String restaurantPassword;
+//	ArrayList<Food> menu;
+//}
 
-class FoodOrder{
-	Food food;
-	int quantity;
-	String customerName;
-	String CustomerNumber;
-	String customerAddress;
-	boolean paid;
-	int restaurantId;
-	String restaurantName;
-	String restaurantLocation;
-}
+//class FoodOrder{
+//	Food food;
+//	int quantity;
+//	String customerName;
+//	String CustomerNumber;
+//	String customerAddress;
+//	boolean paid;
+//	int restaurantId;
+//	String restaurantName;
+//	String restaurantLocation;
+//}
 
 public class Main {
 	public static void main(String[] args) {
@@ -130,7 +131,6 @@ public class Main {
 		ArrayList<FoodOrder> foodToDeliver = new ArrayList<FoodOrder>();
 		FoodOrder foodOrder;
 		Food foodSelected;
-		
 		int restaurantId;
 		String restaurantPassword;
 		Map<Integer, Restaurant> restaurantDetails = new HashMap<Integer, Restaurant>();
@@ -172,7 +172,6 @@ public class Main {
 		restaurant3.restaurantName = "Kfc";
 		restaurant3.restaurantPassword = "123";
 		restaurantDetails.put(3, restaurant3);
-		
 		
 		int choice;
 		Map<String, String> customerLoginDetails= new HashMap<String, String>();
