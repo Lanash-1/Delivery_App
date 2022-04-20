@@ -40,6 +40,13 @@ public class DeliveryPartnerController {
 		model.setPartnerEarnings(partnerEarnings);
 	}
 	
+	public String getPartnerPassword() {
+		return model.getPartnerPassword();
+	}
+	public void setPartnerPassword(String partnerPassword) {
+		model.setPartnerPassword(partnerPassword);
+	}
+	
 	public void updateView(){				
 		view.printDeliveryPartnerDetails(model.getPartnerName(), model.getPartnerMobileNumber(), model.getPartnerVehicleNumber(),model.getPartnerId(), model.getPartnerEarnings());
 	}

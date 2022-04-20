@@ -1,5 +1,7 @@
 package customer;
 
+import customer.membership.Membership;
+
 public class CustomerController {
 	private Customer model;  
 	private CustomerView view;  
@@ -15,6 +17,14 @@ public class CustomerController {
 	
 	public String getCustomerName(){
 		return model.getCustomerName();		
+	}
+	
+	public void setCustomerPassword(String customerPassword){
+		model.setCustomerPassword(customerPassword);		
+	}
+	
+	public String getCustomerPassword(){
+		return model.getCustomerPassword();		
 	}
 	
 	public void setCustomerAddress(String customerAddress){

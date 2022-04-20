@@ -4,6 +4,7 @@ public class DeliveryPartner {
 	private String partnerName;
 	private String partnerMobileNumber;
 	private String partnerVehicleNumber;
+	private String partnerPassword;
 	private String partnerId;
 	private int partnerEarnings = 0;
 	
@@ -36,5 +37,11 @@ public class DeliveryPartner {
 	}
 	public void setPartnerEarnings(int partnerEarnings) {
 		this.partnerEarnings = partnerEarnings;
+	}
+	public String getPartnerPassword() {
+		return partnerPassword;
+	}
+	public void setPartnerPassword(String partnerPassword) {
+		this.partnerPassword = partnerPassword;
 	}
 }

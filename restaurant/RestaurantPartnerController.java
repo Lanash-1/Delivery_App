@@ -42,6 +42,13 @@ public class RestaurantPartnerController {
 		model.setRestaurantMenu(restaurantMenu);
 	}
 	
+	public String getRestaurantPassword() {
+		return model.getRestaurantPassword();
+	}
+	public void setRestaurantPassword(String restaurantPassword) {
+		model.setRestaurantPassword(restaurantPassword);
+	}
+	
 	public void updateView(){				
 		view.printRestaurantPartnerDetails(model.getRestaurantId(), model.getRestaurantName(), model.getRestaurantMobileNumber(), model.getRestaurantLocation());
 	}

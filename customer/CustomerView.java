@@ -1,5 +1,7 @@
 package customer;
 
+import customer.membership.Membership;
+
 public class CustomerView {
 	public void printCustomerDetails(String customerName, String customerNumber, String customerAddress, Membership membership, boolean isMember) {
 		System.out.println("Name: " + customerName);

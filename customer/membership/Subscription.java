@@ -1,8 +1,8 @@
-package customer;
+package customer.membership;
 
 public class Subscription{
 	Membership membership;
-	Subscription(Membership membership){
+	public Subscription(Membership membership){
 		this.membership = membership;
 	}
 	public void subscribe(){

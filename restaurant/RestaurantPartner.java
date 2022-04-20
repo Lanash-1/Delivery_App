@@ -2,10 +2,11 @@ package restaurant;
 import java.util.ArrayList;
 
 public class RestaurantPartner {
+	private int restaurantId;
 	private String restaurantName;
 	private String restaurantLocation;
 	private String restaurantMobileNumber;
-	private int restaurantId;
+	private String restaurantPassword;
 	private ArrayList<FoodItem> restaurantMenu;
 	
 	public String getRestaurantName() {
@@ -37,5 +38,11 @@ public class RestaurantPartner {
 	}
 	public void setRestaurantMenu(ArrayList<FoodItem> restaurantMenu) {
 		this.restaurantMenu = restaurantMenu;
+	}
+	public String getRestaurantPassword() {
+		return restaurantPassword;
+	}
+	public void setRestaurantPassword(String restaurantPassword) {
+		this.restaurantPassword = restaurantPassword;
 	}
 }

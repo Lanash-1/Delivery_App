@@ -1,7 +1,10 @@
 package customer;
 
+import customer.membership.Membership;
+
 public class Customer {
 	private String customerName;
+	private String customerPassword;
 	private String customerAddress;
 	private String customerNumber;
 	private boolean isMember = false;
@@ -36,5 +39,11 @@ public class Customer {
 	}
 	public void setMembership(Membership membership) {
 		this.membership = membership;
+	}
+	public String getCustomerPassword() {
+		return customerPassword;
+	}
+	public void setCustomerPassword(String customerPassword) {
+		this.customerPassword = customerPassword;
 	}
 }
