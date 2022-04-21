@@ -29,12 +29,6 @@ public class RestaurantPartnerController {
 	public void setRestaurantLocation(String restaurantLocation) {
 		model.setRestaurantLocation(restaurantLocation);
 	}
-	public int getRestaurantId() {
-		return model.getRestaurantId();
-	}
-	public void setRestaurantId(int restaurantId) {
-		model.setRestaurantId(restaurantId);
-	}
 	public ArrayList<FoodItem> getRestaurantMenu() {
 		return model.getRestaurantMenu();
 	}
@@ -49,8 +43,15 @@ public class RestaurantPartnerController {
 		model.setRestaurantPassword(restaurantPassword);
 	}
 	
+	public String getRestaurantEmailId() {
+		return model.getRestaurantEmailId();
+	}
+	public void setRestaurantEmailId(String restaurantEmailId) {
+		model.setRestaurantEmailId(restaurantEmailId);
+	}
+	
 	public void updateView(){				
-		view.printRestaurantPartnerDetails(model.getRestaurantId(), model.getRestaurantName(), model.getRestaurantMobileNumber(), model.getRestaurantLocation());
+		view.printRestaurantPartnerDetails(model.getRestaurantName(), model.getRestaurantMobileNumber(), model.getRestaurantLocation(), model.getRestaurantEmailId());
 	}
 	
 	public void viewMenu() {

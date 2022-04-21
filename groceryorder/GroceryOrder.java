@@ -32,4 +32,5 @@ public class GroceryOrder {
 	public void setPaid(boolean paid) {
 		this.paid = paid;
 	}
+	
 }

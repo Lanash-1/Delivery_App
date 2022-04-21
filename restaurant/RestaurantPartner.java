@@ -2,12 +2,12 @@ package restaurant;
 import java.util.ArrayList;
 
 public class RestaurantPartner {
-	private int restaurantId;
+	private String restaurantEmailId;
 	private String restaurantName;
 	private String restaurantLocation;
 	private String restaurantMobileNumber;
 	private String restaurantPassword;
-	private ArrayList<FoodItem> restaurantMenu;
+	private ArrayList<FoodItem> restaurantMenu = new ArrayList<FoodItem>();
 	
 	public String getRestaurantName() {
 		return restaurantName;
@@ -20,12 +20,6 @@ public class RestaurantPartner {
 	}
 	public void setRestaurantLocation(String restaurantLocation) {
 		this.restaurantLocation = restaurantLocation;
-	}
-	public int getRestaurantId() {
-		return restaurantId;
-	}
-	public void setRestaurantId(int restaurantId) {
-		this.restaurantId = restaurantId;
 	}
 	public String getRestaurantMobileNumber() {
 		return restaurantMobileNumber;
@@ -44,5 +38,11 @@ public class RestaurantPartner {
 	}
 	public void setRestaurantPassword(String restaurantPassword) {
 		this.restaurantPassword = restaurantPassword;
+	}
+	public String getRestaurantEmailId() {
+		return restaurantEmailId;
+	}
+	public void setRestaurantEmailId(String restaurantEmailId) {
+		this.restaurantEmailId = restaurantEmailId;
 	}
 }

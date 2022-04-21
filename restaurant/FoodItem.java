@@ -1,7 +1,6 @@
 package restaurant;
 
 public class FoodItem {
-	String foodName;
-	int foodId;
-	int foodCost;
+	public String foodName;
+	public int foodCost;
 }
