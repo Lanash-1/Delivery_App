@@ -46,8 +46,14 @@ public class DeliveryPartnerController {
 	public void setPartnerPassword(String partnerPassword) {
 		model.setPartnerPassword(partnerPassword);
 	}
+	public String getPartnerEmail() {
+		return model.getPartnerEmail();
+	}
+	public void setPartnerEmail(String partnerEmail) {
+		model.setPartnerEmail(partnerEmail);
+	}
 	
 	public void updateView(){				
-		view.printDeliveryPartnerDetails(model.getPartnerName(), model.getPartnerMobileNumber(), model.getPartnerVehicleNumber(),model.getPartnerId(), model.getPartnerEarnings());
+		view.printDeliveryPartnerDetails(model.getPartnerName(), model.getPartnerMobileNumber(), model.getPartnerVehicleNumber(),model.getPartnerId(), model.getPartnerEarnings(), model.getPartnerEmail());
 	}
 }

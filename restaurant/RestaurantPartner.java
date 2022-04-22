@@ -1,6 +1,8 @@
 package restaurant;
 import java.util.ArrayList;
 
+import foodorder.FoodOrderInfo;
+
 public class RestaurantPartner {
 	private String restaurantEmailId;
 	private String restaurantName;
@@ -8,6 +10,7 @@ public class RestaurantPartner {
 	private String restaurantMobileNumber;
 	private String restaurantPassword;
 	private ArrayList<FoodItem> restaurantMenu = new ArrayList<FoodItem>();
+	private ArrayList<FoodOrderInfo> orders = new ArrayList<FoodOrderInfo>();
 	
 	public String getRestaurantName() {
 		return restaurantName;
@@ -44,5 +47,11 @@ public class RestaurantPartner {
 	}
 	public void setRestaurantEmailId(String restaurantEmailId) {
 		this.restaurantEmailId = restaurantEmailId;
+	}
+	public ArrayList<FoodOrderInfo> getOrders() {
+		return orders;
+	}
+	public void setOrders(ArrayList<FoodOrderInfo> orders) {
+		this.orders = orders;
 	}
 }

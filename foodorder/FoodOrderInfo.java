@@ -9,6 +9,7 @@ public class FoodOrderInfo {
 	private boolean paid;
 	private Customer customer;
 	private RestaurantPartner restaurant;
+	private int totalBill;
 	
 	public FoodItem getFoodItem() {
 		return foodItem;
@@ -39,5 +40,11 @@ public class FoodOrderInfo {
 	}
 	public void setRestaurant(RestaurantPartner restaurant) {
 		this.restaurant = restaurant;
+	}
+	public int getTotalBill() {
+		return totalBill;
+	}
+	public void setTotalBill(int totalBill) {
+		this.totalBill = totalBill;
 	}
 } 

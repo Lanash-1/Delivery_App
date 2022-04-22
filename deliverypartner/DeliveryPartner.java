@@ -2,6 +2,7 @@ package deliverypartner;
 
 public class DeliveryPartner {
 	private String partnerName;
+	private String partnerEmail;
 	private String partnerMobileNumber;
 	private String partnerVehicleNumber;
 	private String partnerPassword;
@@ -43,5 +44,11 @@ public class DeliveryPartner {
 	}
 	public void setPartnerPassword(String partnerPassword) {
 		this.partnerPassword = partnerPassword;
+	}
+	public String getPartnerEmail() {
+		return partnerEmail;
+	}
+	public void setPartnerEmail(String partnerEmail) {
+		this.partnerEmail = partnerEmail;
 	}
 }

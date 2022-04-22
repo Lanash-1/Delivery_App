@@ -2,6 +2,8 @@ package restaurant;
 
 import java.util.ArrayList;
 
+import foodorder.FoodOrderInfo;
+
 public class RestaurantPartnerController {
 	private RestaurantPartner model;  
 	private RestaurantPartnerView view;  
@@ -49,12 +51,21 @@ public class RestaurantPartnerController {
 	public void setRestaurantEmailId(String restaurantEmailId) {
 		model.setRestaurantEmailId(restaurantEmailId);
 	}
-	
+	public ArrayList<FoodOrderInfo> getOrders() {
+		return model.getOrders();
+	}
+	public void setOrders(ArrayList<FoodOrderInfo> orders) {
+		model.setOrders(orders);
+	}
 	public void updateView(){				
 		view.printRestaurantPartnerDetails(model.getRestaurantName(), model.getRestaurantMobileNumber(), model.getRestaurantLocation(), model.getRestaurantEmailId());
 	}
 	
 	public void viewMenu() {
 		view.printRestaurantMenu(model.getRestaurantMenu());
+	}
+	
+	public void viewOrder() {
+		view.printViewOrders(model.getOrders());
 	}
 }

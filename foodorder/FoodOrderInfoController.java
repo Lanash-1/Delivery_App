@@ -47,6 +47,13 @@ public class FoodOrderInfoController {
 		model.setRestaurant(restaurant);
 	}
 	
+	public int getTotalBill() {
+		return model.getTotalBill();
+	}
+	public void setTotalBill(int totalBill) {
+		model.setTotalBill(totalBill);
+	}
+	
 	public void viewFoodOrderInfo() {
 		view.printFoodOrderDetails(model.getCustomer(),model.getRestaurant());
 	}

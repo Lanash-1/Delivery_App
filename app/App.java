@@ -13,6 +13,9 @@ import customer.membership.Subscription;
 import deliverypartner.DeliveryPartner;
 import deliverypartner.DeliveryPartnerController;
 import deliverypartner.DeliveryPartnerView;
+import foodorder.FoodOrderInfo;
+import foodorder.FoodOrderInfoController;
+import foodorder.FoodOrderInfoView;
 import payment.Card;
 import payment.PaymentMethod;
 import payment.Upi;
@@ -30,7 +33,7 @@ public class App {
 		Validation validate = new Validation();
 		GenerateOtp otp = new GenerateOtp();
 		HashMap<String, Customer> customerDetails = new HashMap<String, Customer>();
-		Customer customerModel;
+		Customer customerModel = null;
 		CustomerView customerView;
 		CustomerController customerController = null;
 		HashMap<String, DeliveryPartner> deliveryPartnerDetails = new HashMap<String, DeliveryPartner>();
@@ -38,9 +41,16 @@ public class App {
 		DeliveryPartnerView deliveryView;
 		DeliveryPartnerController deliveryController = null;
 		HashMap<String, RestaurantPartner> restaurantDetails = new HashMap<String, RestaurantPartner>();
+		ArrayList<RestaurantPartner> restaurant = new ArrayList<RestaurantPartner>();
 		RestaurantPartner restaurantModel;
 		RestaurantPartnerView restaurantView;
 		RestaurantPartnerController restaurantController = null;
+		ArrayList<FoodOrderInfo> foodOrders = new ArrayList<FoodOrderInfo>();
+		FoodOrderInfo foodOrderModel;
+		FoodOrderInfoView foodOrderView;
+		FoodOrderInfoController foodOrderController;
+		ArrayList<FoodOrderInfo> foodOrdersToDeliver = new ArrayList<FoodOrderInfo>();
+		FoodOrderInfo foodToDeliver;
 		boolean open = true;
 		int choice;
 		while(open) {
@@ -54,10 +64,10 @@ public class App {
 				sc.nextLine();
 				switch(choice) {
 				case 1: // CUSTOMER LOGIN
-					System.out.print("Enter Username: ");
-					String username = sc.nextLine();
-					if(customerDetails.containsKey(username)) {
-						customerModel = customerDetails.get(username);
+					System.out.print("Enter Email ID: ");
+					String emailId = sc.nextLine();
+					if(customerDetails.containsKey(emailId)) {
+						customerModel = customerDetails.get(emailId);
 						customerView = new CustomerView();
 						customerController = new CustomerController(customerModel, customerView);
 						System.out.print("Enter password: ");
@@ -70,7 +80,7 @@ public class App {
 							break;
 						}
 					}else {
-						System.out.println("username does not exists. Try again.");
+						System.out.println("Email ID does not exists. Try again.");
 						break;
 					}
 					break;
@@ -78,20 +88,40 @@ public class App {
 					customerModel = new Customer();
 					customerView = new CustomerView();
 					customerController = new CustomerController(customerModel, customerView);
+					System.out.print("Enter Email Id: ");
+					customerController.setCustomerEmail(sc.nextLine());
+					if(customerDetails.containsKey(customerController.getCustomerEmail())) {
+						System.out.println("Email Id exists already. Login to continue");
+						break;
+					}
+					if(validate.validate(customerController.getCustomerEmail())) {
+						System.out.println("Otp sent to your email id");
+						int generatedOtp = otp.generateOtp();
+						System.out.println("OTP: " + generatedOtp);
+						System.out.print("Enter otp to verify: ");
+						int enteredOtp = sc.nextInt();
+						if(!validate.validate(generatedOtp, enteredOtp)) {
+							break;
+						}
+					}else {
+						break;
+					}
+					sc.nextLine();
 					System.out.print("Create Username: ");
 					customerController.setCustomerName(sc.nextLine());
 					System.out.print("Create Password: ");
 					customerController.setCustomerPassword(sc.nextLine());
+					System.out.println("Re-Enter Password: ");
+					String rePassword = sc.nextLine();
+					if(!validate.validate(customerController.getCustomerPassword(), rePassword)) {
+						break;
+					}
 					System.out.print("Enter address: ");
 					customerController.setCustomerAddress(sc.nextLine());
 					System.out.print("Enter mobile number: ");
 					customerController.setCustomerNumber(sc.nextLine());
-					if(validate.validate(customerController.getCustomerName(), customerController.getCustomerPassword(), customerController.getCustomerAddress(), customerController.getCustomerNumber())) {
-						if(customerDetails.containsKey(customerController.getCustomerName())) {
-							System.out.println("Username already taken. Try Again");
-							break;
-						}
-						customerDetails.put(customerController.getCustomerName(), customerModel);
+					if(validate.validate(customerController.getCustomerName(), customerController.getCustomerNumber(),customerController.getCustomerAddress())) {
+						customerDetails.put(customerController.getCustomerEmail(), customerModel);
 						customerController.updateView();
 						System.out.println("Signed up");
 						customerLogged = true;
@@ -108,10 +138,78 @@ public class App {
 					choice = sc.nextInt();
 					switch(choice) {
 					case 1: // ORDER FOOD
-						System.out.println("Select restaurant");
-						for(int i=0) {
-							
+						if(restaurant.size() == 0) {
+							System.out.println("no restaurants available.");
+							break;
 						}
+						System.out.println("Select restaurant");
+						for(int i=1; i<=restaurant.size(); i++) {
+							System.out.println(i+". "+restaurant.get(i-1).getRestaurantName());
+						}
+						int selectedRestaurant = sc.nextInt();
+						restaurantModel = restaurant.get(selectedRestaurant-1);
+						restaurantView = new RestaurantPartnerView();
+						restaurantController = new RestaurantPartnerController(restaurantModel, restaurantView);
+						System.out.println("Select food");
+						restaurantController.viewMenu();
+						int selectedFood = sc.nextInt();
+						foodOrderModel = new FoodOrderInfo();
+						foodOrderView = new FoodOrderInfoView();
+						foodOrderController = new FoodOrderInfoController(foodOrderModel, foodOrderView);
+						foodOrderController.setFoodItem(restaurantController.getRestaurantMenu().get(selectedFood-1));
+						sc.nextLine();
+						System.out.print("Enter Quantity: ");
+						foodOrderController.setQuantity(sc.nextInt());
+						foodOrderController.setCustomer(customerModel);
+						foodOrderController.setRestaurant(restaurantModel);
+						foodOrderController.setTotalBill(foodOrderController.getFoodItem().foodCost * foodOrderController.getQuantity());
+						System.out.println("1. Pay now\n2. Cash on delivery");
+						choice = sc.nextInt();
+						switch(choice) {
+						case 1: // PAY NOW
+							sc.nextLine();
+							System.out.println("1. Pay using card\n2. Pay using upi");
+							choice = sc.nextInt();
+							sc.nextLine();
+							PaymentMethod method;
+							switch(choice) {
+							case 1:
+								System.out.print("Enter card number: ");
+								String cardNumber = sc.nextLine();
+								method = new Card();
+								method.pay(cardNumber, foodOrderController.getTotalBill());
+								foodOrderController.setPaid(true);
+								foodOrders = restaurantController.getOrders();
+								foodOrders.add(foodOrderModel);
+								restaurantController.setOrders(foodOrders);
+								System.out.println("Order placed");
+								break;
+							case 2:
+								System.out.print("Enter UPI Id: ");
+								String UpiId = sc.nextLine();
+								method = new Upi();
+								method.pay(UpiId, foodOrderController.getTotalBill());
+								foodOrderController.setPaid(true);
+								foodOrders = restaurantController.getOrders();
+								foodOrders.add(foodOrderModel);
+								restaurantController.setOrders(foodOrders);
+								System.out.println("Order placed");
+								break;
+							default:
+								System.out.println("Select valid payment option");
+							}
+							break;
+						case 2: // CASH ON DELIVERY
+							foodOrderController.setPaid(false);
+							foodOrders = restaurantController.getOrders();
+							foodOrders.add(foodOrderModel);
+							restaurantController.setOrders(foodOrders);
+							System.out.println("Order placed");
+							break;
+						default:
+							System.out.println("Invalid option. Order Again");
+						}
+						
 						break;
 					case 2: // ORDER GROCERIES
 						System.out.println("Coming soon.");
@@ -126,12 +224,12 @@ public class App {
 						System.out.println("1. PRO Membership\n2. GOLD Membership");
 						choice = sc.nextInt();
 						switch(choice) {
-						case 1:
+						case 1: // PRO MEMBERSHIP
 							membership = new ProMembership();
 							subscription = new Subscription(membership);
 							subscription.subscribe();
 							break;
-						case 2:
+						case 2: // GOLD MEMBERSHIP
 							membership = new GoldMembership();
 							subscription = new Subscription(membership);
 							subscription.subscribe();
@@ -197,10 +295,10 @@ public class App {
 				sc.nextLine();
 				switch(choice) {
 				case 1: // DELIVERY PARTNER LOGIN
-					System.out.print("Enter Partner ID: ");
-					String partnerId = sc.nextLine();
-					if(deliveryPartnerDetails.containsKey(partnerId)) {
-						deliveryModel = deliveryPartnerDetails.get(partnerId);
+					System.out.print("Enter Email ID: ");
+					String emailId = sc.nextLine();
+					if(deliveryPartnerDetails.containsKey(emailId)) {
+						deliveryModel = deliveryPartnerDetails.get(emailId);
 						deliveryView = new DeliveryPartnerView();
 						deliveryController = new DeliveryPartnerController(deliveryModel, deliveryView);
 						System.out.print("Enter password: ");
@@ -213,7 +311,7 @@ public class App {
 							break;
 						}
 					}else {
-						System.out.println("Partner ID does not exists. Try again.");
+						System.out.println("Email Id does not exists. Try again.");
 						break;
 					}
 					break;
@@ -221,22 +319,42 @@ public class App {
 					deliveryModel = new DeliveryPartner();
 					deliveryView = new DeliveryPartnerView();
 					deliveryController = new DeliveryPartnerController(deliveryModel, deliveryView);
+					System.out.print("Enter Email Id: ");
+					deliveryController.setPartnerEmail(sc.nextLine());
+					if(deliveryPartnerDetails.containsKey(deliveryController.getPartnerEmail())) {
+						System.out.println("Email Id exists already. Login to continue");
+						break;
+					}
+					if(validate.validate(deliveryController.getPartnerEmail())) {
+						System.out.println("Otp sent to your email id");
+						int generatedOtp = otp.generateOtp();
+						System.out.println("OTP: " + generatedOtp);
+						System.out.print("Enter otp to verify: ");
+						int enteredOtp = sc.nextInt();
+						if(!validate.validate(generatedOtp, enteredOtp)) {
+							break;
+						}
+					}else {
+						break;
+					}
+					sc.nextLine();
 					System.out.print("Create Partner Id: ");
 					deliveryController.setPartnerId(sc.nextLine());
 					System.out.print("Create Password: ");
 					deliveryController.setPartnerPassword(sc.nextLine());
+					System.out.println("Re-Enter Password: ");
+					String rePassword = sc.nextLine();
+					if(!validate.validate(deliveryController.getPartnerPassword(), rePassword)) {
+						break;
+					}
 					System.out.print("Enter Name: ");
 					deliveryController.setPartnerName(sc.nextLine());
 					System.out.print("Enter mobile number: ");
 					deliveryController.setPartnerMobileNumber(sc.nextLine());
 					System.out.print("Enter vehicle Reg no: ");
 					deliveryController.setPartnerVehicleNumber(sc.nextLine());
-					if(validate.validate(deliveryController.getPartnerName(), deliveryController.getPartnerPassword(), deliveryController.getPartnerId(), deliveryController.getPartnerMobileNumber(), deliveryController.getPartnerVehicleNumber())) {
-						if(customerDetails.containsKey(deliveryController.getPartnerId())) {
-							System.out.println("ID already taken. Try Again");
-							break;
-						}
-						deliveryPartnerDetails.put(deliveryController.getPartnerId(), deliveryModel);
+					if(validate.validate(deliveryController.getPartnerName(), deliveryController.getPartnerId(), deliveryController.getPartnerMobileNumber(), deliveryController.getPartnerVehicleNumber())) {
+						deliveryPartnerDetails.put(deliveryController.getPartnerEmail(), deliveryModel);
 						deliveryController.updateView();
 						System.out.println("Signed up");
 						deliveryPartnerLogged = true;
@@ -252,9 +370,23 @@ public class App {
 					System.out.println("1.View Food order\n2. View Grocery Order\n3. View Profile\n4. Withdraw Earnings\n5. logout");
 					choice = sc.nextInt();
 					switch(choice) {
-					case 1: // VIEW FOOD ORDER
+					case 1: // VIEW FOOD ORDER TO DELIVER
+						if(foodOrdersToDeliver.size() > 0) {
+							foodOrderModel = foodOrdersToDeliver.get(0);
+							foodOrderView = new FoodOrderInfoView();
+							foodOrderController = new FoodOrderInfoController(foodOrderModel, foodOrderView);
+							foodOrderController.viewFoodOrderInfo();
+							System.out.println("Order pickedUp");
+							System.out.println("Order delivered");
+							System.out.print("Ride Earnings: " + ((foodOrderController.getTotalBill())*10)/100);
+							foodOrdersToDeliver.remove(0);
+							deliveryController.setPartnerEarnings(deliveryController.getPartnerEarnings() + ((foodOrderController.getTotalBill())*10)/100);
+						}else {
+							System.out.println("No orders to deliver");
+						}
 						break;
 					case 2: // VIEW GROCERY ORDER
+						System.out.println("Coming soon");
 						break;
 					case 3: // VIEW PROFILE
 						deliveryController.updateView();
@@ -349,6 +481,7 @@ public class App {
 						restaurantDetails.put(restaurantController.getRestaurantEmailId(), restaurantModel);
 						restaurantController.updateView();
 						System.out.println("Signed up");
+						restaurant.add(restaurantModel);
 						restaurantLogged = true;
 					}else {
 						System.out.println("Try again.");
@@ -362,6 +495,18 @@ public class App {
 					choice = sc.nextInt();
 					switch(choice) {
 					case 1: // VIEW ORDER
+						restaurantController.viewOrder();
+						if(restaurantController.getOrders().size() > 0) {							
+							sc.nextLine();
+							System.out.print("Select order to prepare: ");
+							int orderToComplete = sc.nextInt();
+							sc.nextLine();
+							System.out.println("Completed preparation of the order");
+							foodOrdersToDeliver.add(restaurantController.getOrders().get(orderToComplete-1));
+							foodOrders = restaurantController.getOrders();
+							foodOrders.remove(orderToComplete-1);
+							restaurantController.setOrders(foodOrders);
+						}
 						break;
 					case 2: // ADD OR EDIT MENU
 						FoodItem food;

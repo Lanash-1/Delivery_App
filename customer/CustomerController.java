@@ -56,7 +56,14 @@ public class CustomerController {
 		model.setMembership(membership);
 	}
 	
+	public String getCustomerEmail() {
+		return model.getCustomerEmail();
+	}
+	public void setCustomerEmail(String customerEmail) {
+		model.setCustomerEmail(customerEmail);
+	}
+	
 	public void updateView(){				
-		view.printCustomerDetails(model.getCustomerName(), model.getCustomerNumber(), model.getCustomerAddress(), model.getMembership(), model.isMember());
+		view.printCustomerDetails(model.getCustomerName(), model.getCustomerNumber(), model.getCustomerAddress(), model.getMembership(), model.isMember(), model.getCustomerEmail());
 	}
 }

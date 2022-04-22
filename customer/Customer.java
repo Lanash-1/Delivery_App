@@ -7,6 +7,7 @@ public class Customer {
 	private String customerPassword;
 	private String customerAddress;
 	private String customerNumber;
+	private String customerEmail;
 	private boolean isMember = false;
 	private Membership membership;
 	
@@ -45,5 +46,11 @@ public class Customer {
 	}
 	public void setCustomerPassword(String customerPassword) {
 		this.customerPassword = customerPassword;
+	}
+	public String getCustomerEmail() {
+		return customerEmail;
+	}
+	public void setCustomerEmail(String customerEmail) {
+		this.customerEmail = customerEmail;
 	}
 }
