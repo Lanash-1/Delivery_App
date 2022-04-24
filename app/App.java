@@ -388,11 +388,27 @@ public class App {
 							foodOrderView = new FoodOrderInfoView();
 							foodOrderController = new FoodOrderInfoController(foodOrderModel, foodOrderView);
 							foodOrderController.viewFoodOrderInfo();
-							System.out.println("Order pickedUp");
-							System.out.println("Order delivered");
-							System.out.println("Ride Earnings: " + ((foodOrderController.getTotalBill())*10)/100);
-							foodOrdersToDeliver.remove(0);
-							deliveryController.setPartnerEarnings(deliveryController.getPartnerEarnings() + ((foodOrderController.getTotalBill())*10)/100);
+							System.out.println("1. Accept order\n2. Cancel order");
+							choice = sc.nextInt();
+							switch(choice) {
+							case 1:
+								System.out.println("Order pickedUp");
+								if(!foodOrderController.isPaid()) {
+									System.out.println("Amount collected");
+								}else {
+									System.out.println("Amount paid online");
+								}
+								System.out.println("Order delivered");
+								System.out.println("Ride Earnings: " + ((foodOrderController.getTotalBill())*10)/100);
+								foodOrdersToDeliver.remove(0);
+								deliveryController.setPartnerEarnings(deliveryController.getPartnerEarnings() + ((foodOrderController.getTotalBill())*10)/100);
+								break;
+							case 2:
+								System.out.println("Skipped order");
+								break;
+							default:
+								System.out.println("Invalid option");
+							}
 						}else {
 							System.out.println("No orders to deliver");
 						}
