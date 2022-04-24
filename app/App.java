@@ -83,6 +83,7 @@ public class App {
 						System.out.println("Email ID does not exists. Try again.");
 						break;
 					}
+					
 					break;
 				case 2: // CUSTOMER SIGNUP
 					customerModel = new Customer();
@@ -162,7 +163,18 @@ public class App {
 						foodOrderController.setQuantity(sc.nextInt());
 						foodOrderController.setCustomer(customerModel);
 						foodOrderController.setRestaurant(restaurantModel);
-						foodOrderController.setTotalBill(foodOrderController.getFoodItem().foodCost * foodOrderController.getQuantity());
+						int totalBill = foodOrderController.getFoodItem().foodCost * foodOrderController.getQuantity();
+						if(customerController.isMember()) {
+							System.out.println("Bill: " + totalBill);
+							System.out.println("No delivery charges");
+							System.out.println("Total bill: " + totalBill);
+						}else {
+							System.out.println("Bill: " + totalBill);
+							System.out.println("Delivery charges: Rs.25");
+							totalBill += 25;
+							System.out.println("Total bill: " + totalBill);
+						}
+						foodOrderController.setTotalBill(totalBill);
 						System.out.println("1. Pay now\n2. Cash on delivery");
 						choice = sc.nextInt();
 						switch(choice) {
@@ -378,7 +390,7 @@ public class App {
 							foodOrderController.viewFoodOrderInfo();
 							System.out.println("Order pickedUp");
 							System.out.println("Order delivered");
-							System.out.print("Ride Earnings: " + ((foodOrderController.getTotalBill())*10)/100);
+							System.out.println("Ride Earnings: " + ((foodOrderController.getTotalBill())*10)/100);
 							foodOrdersToDeliver.remove(0);
 							deliveryController.setPartnerEarnings(deliveryController.getPartnerEarnings() + ((foodOrderController.getTotalBill())*10)/100);
 						}else {
