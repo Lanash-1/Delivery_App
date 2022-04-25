@@ -1,5 +1,7 @@
 package deliverypartner;
 
+import java.io.IOException;
+
 public class DeliveryPartnerController {
 	private DeliveryPartner model;  
 	private DeliveryPartnerView view;  
@@ -54,6 +56,11 @@ public class DeliveryPartnerController {
 	}
 	
 	public void updateView(){				
-		view.printDeliveryPartnerDetails(model.getPartnerName(), model.getPartnerMobileNumber(), model.getPartnerVehicleNumber(),model.getPartnerId(), model.getPartnerEarnings(), model.getPartnerEmail());
+		try {
+			view.printDeliveryPartnerDetails(model.getPartnerName(), model.getPartnerMobileNumber(), model.getPartnerVehicleNumber(),model.getPartnerId(), model.getPartnerEarnings(), model.getPartnerEmail());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
