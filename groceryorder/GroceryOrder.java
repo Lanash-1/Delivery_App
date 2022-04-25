@@ -7,6 +7,7 @@ public class GroceryOrder {
 	private Customer customer;
 	private int quantity;  
 	private boolean paid;
+	private int totalBill;
 	
 	public Grocery getGrocery() {
 		return grocery;
@@ -32,5 +33,10 @@ public class GroceryOrder {
 	public void setPaid(boolean paid) {
 		this.paid = paid;
 	}
-	
+	public int getTotalBill() {
+		return totalBill;
+	}
+	public void setTotalBill(int totalBill) {
+		this.totalBill = totalBill;
+	}
 }

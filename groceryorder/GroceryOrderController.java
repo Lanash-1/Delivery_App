@@ -35,6 +35,13 @@ public class GroceryOrderController {
 	public void setPaid(boolean paid) {
 		model.setPaid(paid);
 	}
+	
+	public int getTotalBill() {
+		return model.getTotalBill();
+	}
+	public void setTotalBill(int totalBill) {
+		model.setTotalBill(totalBill);
+	}
 
 	public void viewGroceryOrder() {
 		view.printGroceryOrderDetails(model.getGrocery(), model.getCustomer(), model.getQuantity(), model.isPaid());

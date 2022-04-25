@@ -1,7 +1,7 @@
 package groceryorder;
 
 public class Grocery {
-	int productId;
-	String productName;
-	int productPrice;
+	public int productId;
+	public String productName;
+	public int productPrice;
 }

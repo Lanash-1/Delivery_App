@@ -16,6 +16,10 @@ import deliverypartner.DeliveryPartnerView;
 import foodorder.FoodOrderInfo;
 import foodorder.FoodOrderInfoController;
 import foodorder.FoodOrderInfoView;
+import groceryorder.Grocery;
+import groceryorder.GroceryOrder;
+import groceryorder.GroceryOrderController;
+import groceryorder.GroceryOrderView;
 import payment.Card;
 import payment.PaymentMethod;
 import payment.Upi;
@@ -51,6 +55,26 @@ public class App {
 		FoodOrderInfoController foodOrderController;
 		ArrayList<FoodOrderInfo> foodOrdersToDeliver = new ArrayList<FoodOrderInfo>();
 		FoodOrderInfo foodToDeliver;
+		ArrayList<Grocery> groceryList = new ArrayList<Grocery>();
+		Grocery grocery1 = new Grocery();
+		grocery1.productId = 1;
+		grocery1.productName = "chips";
+		grocery1.productPrice = 5;
+		groceryList.add(grocery1);
+		Grocery grocery2 = new Grocery();
+		grocery2.productId = 2;
+		grocery2.productName = "biscuit";
+		grocery2.productPrice = 10;
+		groceryList.add(grocery2);
+		Grocery grocery3 = new Grocery();
+		grocery3.productId = 3;
+		grocery3.productName = "milk";
+		grocery3.productPrice = 20;
+		groceryList.add(grocery3);
+		ArrayList<GroceryOrder> groceryOrderList = new ArrayList<GroceryOrder>();
+		GroceryOrder groceryOrderModel = new GroceryOrder();
+		GroceryOrderView groceryOrderView = new GroceryOrderView();
+		GroceryOrderController groceryOrderController = new GroceryOrderController(groceryOrderModel, groceryOrderView);
 		boolean open = true;
 		int choice;
 		while(open) {
@@ -221,10 +245,71 @@ public class App {
 						default:
 							System.out.println("Invalid option. Order Again");
 						}
-						
 						break;
 					case 2: // ORDER GROCERIES
-						System.out.println("Coming soon.");
+						for(Grocery item : groceryList) {
+							System.out.println(item.productId+". "+item.productName+" - "+item.productPrice);
+						}
+						System.out.println("Select grocery");
+						int selectedGrocery = sc.nextInt();
+						sc.nextLine();
+						System.out.print("Enter quantity: ");
+						int groceryQuantity = sc.nextInt();
+						groceryOrderController.setCustomer(customerModel);
+						groceryOrderController.setGrocery(groceryList.get(selectedGrocery-1));
+						groceryOrderController.setQuantity(groceryQuantity);
+						int groceryBill = groceryOrderController.getGrocery().productPrice * groceryQuantity;
+						if(customerController.isMember()) {
+							System.out.println("Bill: " + groceryBill);
+							System.out.println("No delivery charges");
+							System.out.println("Total bill: " + groceryBill);
+						}else {
+							System.out.println("Bill: " + groceryBill);
+							System.out.println("Delivery charges: Rs.25");
+							groceryBill += 25;
+							System.out.println("Total bill: " + groceryBill);
+						}
+						groceryOrderController.setTotalBill(groceryBill);
+						System.out.println("1. Pay now\n2. Cash on delivery");
+						choice = sc.nextInt();
+						switch(choice) {
+						case 1: // PAY NOW
+							sc.nextLine();
+							System.out.println("1. Pay using card\n2. Pay using upi");
+							choice = sc.nextInt();
+							sc.nextLine();
+							PaymentMethod method;
+							switch(choice) {
+							case 1:
+								System.out.print("Enter card number: ");
+								String cardNumber = sc.nextLine();
+								method = new Card();
+								method.pay(cardNumber, groceryOrderController.getTotalBill());
+								groceryOrderController.setPaid(true);
+								groceryOrderList.add(groceryOrderModel);
+								System.out.println("Order placed");
+								break;
+							case 2:
+								System.out.print("Enter UPI Id: ");
+								String UpiId = sc.nextLine();
+								method = new Upi();
+								method.pay(UpiId, groceryOrderController.getTotalBill());
+								groceryOrderController.setPaid(true);
+								groceryOrderList.add(groceryOrderModel);
+								System.out.println("Order placed");
+								break;
+							default:
+								System.out.println("Select valid payment option");
+							}
+							break;
+						case 2: // CASH ON DELIVERY
+							groceryOrderController.setPaid(false);
+							groceryOrderList.add(groceryOrderModel);
+							System.out.println("Order placed");
+							break;
+						default:
+							System.out.println("Invalid option. Order Again");
+						}
 						break;
 					case 3: // BUY MEMBERSHIP
 						if(customerController.isMember()) {
@@ -414,7 +499,34 @@ public class App {
 						}
 						break;
 					case 2: // VIEW GROCERY ORDER
-						System.out.println("Coming soon");
+						if(groceryOrderList.size() > 0) {
+							groceryOrderModel = groceryOrderList.get(0);
+							groceryOrderController = new GroceryOrderController(groceryOrderModel, groceryOrderView);
+							groceryOrderController.viewGroceryOrder();
+							System.out.println("1. Accept order\n2. Cancel order");
+							choice = sc.nextInt();
+							switch(choice) {
+							case 1:
+								System.out.println("Order pickedUp");
+								if(!groceryOrderController.isPaid()) {
+									System.out.println("Amount collected");
+								}else {
+									System.out.println("Amount paid online");
+								}
+								System.out.println("Order delivered");
+								System.out.println("Ride Earnings: " + ((groceryOrderController.getTotalBill())*5)/100);
+								groceryOrderList.remove(0);
+								deliveryController.setPartnerEarnings(deliveryController.getPartnerEarnings() + ((groceryOrderController.getTotalBill())*5)/100);
+								break;
+							case 2:
+								System.out.println("Skipped order");
+								break;
+							default:
+								System.out.println("Invalid option");
+							}
+						}else {
+							System.out.println("No orders to deliver");
+						}
 						break;
 					case 3: // VIEW PROFILE
 						deliveryController.updateView();
