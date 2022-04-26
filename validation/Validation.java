@@ -11,7 +11,7 @@ public class Validation {
 	}
 	
 	public boolean validate(String emailId) {
-		if(emailId.contains("@gmail.com") && emailId.length() > 10) {
+		if(emailId.endsWith("@gmail.com") && emailId.length() > 10) {
 			return true;
 		}
 		System.out.println("Enter valid email id");
