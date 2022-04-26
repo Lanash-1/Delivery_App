@@ -1,4 +1,4 @@
-package restaurant;
+ package restaurant;
 
 import java.util.ArrayList;
 
@@ -17,6 +17,7 @@ public class RestaurantPartnerView {
 			System.out.println(i+". "+restaurantMenu.get(i-1).foodName+" - "+restaurantMenu.get(i-1).foodCost);
 		}
 	}
+	
 	public void printViewOrders(ArrayList<FoodOrderInfo> orders) {
 		if(orders.size() > 0) {
 			for(int i=0; i<orders.size(); i++) {

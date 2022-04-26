@@ -1,5 +1,7 @@
 package customer;
 
+import java.io.IOException;
+
 import customer.membership.Membership;
 import validation.DetailsVerification;
 import validation.EmailAndPasswordVerification;
@@ -67,7 +69,11 @@ public class CustomerController extends GenerateOtp implements EmailAndPasswordV
 	}
 	
 	public void updateView(){				
-		view.printCustomerDetails(model.getCustomerName(), model.getCustomerNumber(), model.getCustomerAddress(), model.getMembership(), model.isMember(), model.getCustomerEmail());
+		try {
+			view.printCustomerDetails(model.getCustomerName(), model.getCustomerNumber(), model.getCustomerAddress(), model.getMembership(), model.isMember(), model.getCustomerEmail());
+		} catch (IOException e) {
+			System.out.println("Error in display");
+		}
 	}
 
 	public boolean validate(String email) {
