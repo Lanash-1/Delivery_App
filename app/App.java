@@ -28,14 +28,10 @@ import restaurant.FoodItem;
 import restaurant.RestaurantPartner;
 import restaurant.RestaurantPartnerController;
 import restaurant.RestaurantPartnerView;
-import validation.GenerateOtp;
-import validation.Validation;
 
 public class App {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		Validation validate = new Validation();
-		GenerateOtp otp = new GenerateOtp();
 		HashMap<String, Customer> customerDetails = new HashMap<String, Customer>();
 		Customer customerModel = null;
 		CustomerView customerView;
@@ -119,13 +115,13 @@ public class App {
 						System.out.println("Email Id exists already. Login to continue");
 						break;
 					}
-					if(validate.validate(customerController.getCustomerEmail())) {
+					if(customerController.validate(customerController.getCustomerEmail())) {
 						System.out.println("Otp sent to your email id");
-						int generatedOtp = otp.generateOtp();
+						int generatedOtp = customerController.generateOtp();
 						System.out.println("OTP: " + generatedOtp);
 						System.out.print("Enter otp to verify: ");
 						int enteredOtp = sc.nextInt();
-						if(!validate.validate(generatedOtp, enteredOtp)) {
+						if(!customerController.validate(generatedOtp, enteredOtp)) {
 							break;
 						}
 					}else {
@@ -138,14 +134,14 @@ public class App {
 					customerController.setCustomerPassword(sc.nextLine());
 					System.out.println("Re-Enter Password: ");
 					String rePassword = sc.nextLine();
-					if(!validate.validate(customerController.getCustomerPassword(), rePassword)) {
+					if(!customerController.validate(customerController.getCustomerPassword(), rePassword)) {
 						break;
 					}
 					System.out.print("Enter address: ");
 					customerController.setCustomerAddress(sc.nextLine());
 					System.out.print("Enter mobile number: ");
 					customerController.setCustomerNumber(sc.nextLine());
-					if(validate.validate(customerController.getCustomerName(), customerController.getCustomerNumber(),customerController.getCustomerAddress())) {
+					if(customerController.validate(customerController.getCustomerName(), customerController.getCustomerNumber(),customerController.getCustomerAddress())) {
 						customerDetails.put(customerController.getCustomerEmail(), customerModel);
 						customerController.updateView();
 						System.out.println("Signed up");
@@ -422,13 +418,13 @@ public class App {
 						System.out.println("Email Id exists already. Login to continue");
 						break;
 					}
-					if(validate.validate(deliveryController.getPartnerEmail())) {
+					if(deliveryController.validate(deliveryController.getPartnerEmail())) {
 						System.out.println("Otp sent to your email id");
-						int generatedOtp = otp.generateOtp();
+						int generatedOtp = deliveryController.generateOtp();
 						System.out.println("OTP: " + generatedOtp);
 						System.out.print("Enter otp to verify: ");
 						int enteredOtp = sc.nextInt();
-						if(!validate.validate(generatedOtp, enteredOtp)) {
+						if(!deliveryController.validate(generatedOtp, enteredOtp)) {
 							break;
 						}
 					}else {
@@ -441,7 +437,7 @@ public class App {
 					deliveryController.setPartnerPassword(sc.nextLine());
 					System.out.println("Re-Enter Password: ");
 					String rePassword = sc.nextLine();
-					if(!validate.validate(deliveryController.getPartnerPassword(), rePassword)) {
+					if(!deliveryController.validate(deliveryController.getPartnerPassword(), rePassword)) {
 						break;
 					}
 					System.out.print("Enter Name: ");
@@ -450,7 +446,7 @@ public class App {
 					deliveryController.setPartnerMobileNumber(sc.nextLine());
 					System.out.print("Enter vehicle Reg no: ");
 					deliveryController.setPartnerVehicleNumber(sc.nextLine());
-					if(validate.validate(deliveryController.getPartnerName(), deliveryController.getPartnerId(), deliveryController.getPartnerMobileNumber(), deliveryController.getPartnerVehicleNumber())) {
+					if(deliveryController.validate(deliveryController.getPartnerName(), deliveryController.getPartnerId(), deliveryController.getPartnerMobileNumber(), deliveryController.getPartnerVehicleNumber())) {
 						deliveryPartnerDetails.put(deliveryController.getPartnerEmail(), deliveryModel);
 						deliveryController.updateView();
 						System.out.println("Signed up");
@@ -591,13 +587,13 @@ public class App {
 						System.out.println("Email Id exists already. Login to continue");
 						break;
 					}
-					if(validate.validate(restaurantController.getRestaurantEmailId())) {
+					if(restaurantController.validate(restaurantController.getRestaurantEmailId())) {
 						System.out.println("Otp sent to your email id");
-						int generatedOtp = otp.generateOtp();
+						int generatedOtp = restaurantController.generateOtp();
 						System.out.println("OTP: " + generatedOtp);
 						System.out.print("Enter otp to verify: ");
 						int enteredOtp = sc.nextInt();
-						if(!validate.validate(generatedOtp, enteredOtp)) {
+						if(!restaurantController.validate(generatedOtp, enteredOtp)) {
 							break;
 						}
 					}else {
@@ -608,7 +604,7 @@ public class App {
 					restaurantController.setRestaurantPassword(sc.nextLine());
 					System.out.println("Re-Enter Password: ");
 					String rePassword = sc.nextLine();
-					if(!validate.validate(restaurantController.getRestaurantPassword(), rePassword)) {
+					if(!restaurantController.validate(restaurantController.getRestaurantPassword(), rePassword)) {
 						break;
 					}
 					System.out.print("Enter Restaurant Name: ");
@@ -617,7 +613,7 @@ public class App {
 					restaurantController.setRestaurantMobileNumber(sc.nextLine());
 					System.out.print("Enter Restaurant Location: ");
 					restaurantController.setRestaurantLocation(sc.nextLine());
-					if(validate.validate(restaurantController.getRestaurantName(), restaurantController.getRestaurantMobileNumber(), restaurantController.getRestaurantLocation())) {
+					if(restaurantController.validate(restaurantController.getRestaurantName(), restaurantController.getRestaurantMobileNumber(), restaurantController.getRestaurantLocation())) {
 						restaurantDetails.put(restaurantController.getRestaurantEmailId(), restaurantModel);
 						restaurantController.updateView();
 						System.out.println("Signed up");

@@ -1,8 +1,11 @@
 package customer;
 
 import customer.membership.Membership;
+import validation.DetailsVerification;
+import validation.EmailAndPasswordVerification;
+import validation.GenerateOtp;
 
-public class CustomerController {
+public class CustomerController extends GenerateOtp implements EmailAndPasswordVerification, DetailsVerification{
 	private Customer model;  
 	private CustomerView view;  
 	 
@@ -65,5 +68,43 @@ public class CustomerController {
 	
 	public void updateView(){				
 		view.printCustomerDetails(model.getCustomerName(), model.getCustomerNumber(), model.getCustomerAddress(), model.getMembership(), model.isMember(), model.getCustomerEmail());
+	}
+
+	public boolean validate(String email) {
+		if(email.endsWith("@gmail.com") && email.length() > 10) {
+			return true;
+		}
+		System.out.println("Enter valid email id");
+		return false;
+	}
+
+	public boolean validate(int generatedOtp, int enteredOtp) {
+		if(generatedOtp == enteredOtp) {
+			System.out.println("Verified");
+			return true;
+		}
+		System.out.println("Entered otp is not matching. Try again");
+		return false;
+	}
+
+	public boolean validate(String password, String rePassword) {
+		if(password.length() < 4){
+			System.out.println("Password is too short. Try again");
+			return false;
+		}
+		if(password.equals(rePassword)) {
+			System.out.println("Password Matching. Continue signup.");
+			return true;
+		}
+		System.out.println("Password not matching. Try again");
+		return false;
+	}
+	
+	public boolean validate(String name, String mobileNumber, String location) {
+		if(location.length() < 1 || mobileNumber.length()!=10 || name.length() < 1) {
+			System.out.println("Enter details properly");
+			return false;
+		}
+		return true;
 	}
 }

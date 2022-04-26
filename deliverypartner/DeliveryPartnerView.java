@@ -2,6 +2,7 @@ package deliverypartner;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Scanner;
 
 public class DeliveryPartnerView {
 	public void printDeliveryPartnerDetails(String partnerName, String partnerMobileNumber, String partnerVehicleNumber, String partnerId, int partnerEarnings, String partnerEmail) throws Exception {
@@ -24,5 +25,10 @@ public class DeliveryPartnerView {
 		writer.write("\nVehicle No: " + partnerVehicleNumber);
 		writer.write("\nPartner Earnings: " + partnerEarnings);
 		writer.close();
+		
+		Scanner sc = new Scanner(file);
+		while(sc.hasNextLine()) {
+			System.out.println(sc.nextLine());
+		}
 	}
 }
