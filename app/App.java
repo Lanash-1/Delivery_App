@@ -72,10 +72,15 @@ public class App {
 		GroceryOrderView groceryOrderView = new GroceryOrderView();
 		GroceryOrderController groceryOrderController = new GroceryOrderController(groceryOrderModel, groceryOrderView);
 		boolean open = true;
-		int choice;
+		int choice = 0;
 		while(open) {
 			System.out.println("1. Customer\n2. Delivery Partner\n3. Restaurant partner\n4. Close app");
+			try {
 			choice = sc.nextInt();
+			}catch (Exception e) {
+				System.out.println("Something's wrong.");
+				sc.nextLine();
+			}
 			switch(choice) {
 			case 1: // CUSTOMER
 				boolean customerLogged = false;

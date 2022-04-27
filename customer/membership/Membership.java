@@ -1,17 +1,12 @@
 package customer.membership;
 
-public class Membership {
+abstract public class Membership {
 	public int price;
 	public String benefits;
 	public String membershipType;
 	public String membershipValidity;
 	
-	public void setMembershipDetails() {
-		price = 20;
-		benefits = "";
-		membershipType = "";
-		membershipValidity = "";
-	}
+	abstract void setMembershipDetails();
 	
 	public void getMembershipInfo() {
 		System.out.println("Choose any membership");
