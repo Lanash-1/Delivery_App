@@ -95,14 +95,14 @@ public class CustomerController extends GenerateOtp implements EmailAndPasswordV
 
 	public boolean validate(String password, String rePassword) {
 		if(password.length() < 4){
-			System.out.println("Password is too short. Try again");
+			view.viewMessage("Password too short. Should atleast 4 characters", "\u001B[31m");
 			return false;
 		}
 		if(password.equals(rePassword)) {
 			System.out.println("Password Matching. Continue signup.");
 			return true;
 		}
-		System.out.println("Password not matching. Try again");
+		view.viewMessage("Password not matching. Try again", "\u001B[31m");
 		return false;
 	}
 	

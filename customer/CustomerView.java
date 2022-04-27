@@ -8,6 +8,9 @@ import java.util.Scanner;
 import customer.membership.Membership;
 
 public class CustomerView {
+	public static final String ANSI_RESET = "\u001B[0m";
+	public static final String ANSI_COLOR = "\u001B[31m";
+	
 	public void printCustomerDetails(String customerName, String customerNumber, String customerAddress, Membership membership, boolean isMember, String customerEmail) throws IOException {
 		File file = new File("customerProfile.txt");
 				
@@ -21,12 +24,13 @@ public class CustomerView {
 		writer.write("\nMobile number: " + customerNumber);
 		writer.write("\nAddress: " + customerAddress);
 		if(isMember) {
+			writer.write("\n*****Membership details*****");
 			writer.write("\nMembership Type: " + membership.membershipType);
 			writer.write("\nPrice: " + membership.price);
 			writer.write("\nValidity: " + membership.membershipValidity);
 			writer.write("\nBenefits: " + membership.benefits);
 		}else {
-			writer.write("\nMember: Not a member");
+			writer.write("\nMembership status: Not a member");
 		}
 		writer.close();
 		
@@ -35,4 +39,9 @@ public class CustomerView {
 			System.out.println(sc.nextLine());
 		}
 	}
+	public void viewMessage(String message, String color) {
+//		ANSI_COLOR = color;
+		System.out.println(ANSI_COLOR+message+ANSI_RESET);
+	}
+	
 }

@@ -30,11 +30,15 @@ import restaurant.RestaurantPartnerController;
 import restaurant.RestaurantPartnerView;
 
 public class App {
+	enum Action{
+		CUSTOMER,DELIVERYPARTNER,RESTAURANT,CLOSEAPP,DEFAULT
+	}
+	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		HashMap<String, Customer> customerDetails = new HashMap<String, Customer>();
-		Customer customerModel = null;
-		CustomerView customerView;
+//		Customer customerModel = null;
+//		CustomerView customerView;
 		CustomerController customerController = null;
 		HashMap<String, DeliveryPartner> deliveryPartnerDetails = new HashMap<String, DeliveryPartner>();
 		DeliveryPartner deliveryModel;
@@ -52,20 +56,11 @@ public class App {
 		ArrayList<FoodOrderInfo> foodOrdersToDeliver = new ArrayList<FoodOrderInfo>();
 		FoodOrderInfo foodToDeliver;
 		ArrayList<Grocery> groceryList = new ArrayList<Grocery>();
-		Grocery grocery1 = new Grocery();
-		grocery1.productId = 1;
-		grocery1.productName = "chips";
-		grocery1.productPrice = 5;
+		Grocery grocery1 = new Grocery(1,"chips",5);
 		groceryList.add(grocery1);
-		Grocery grocery2 = new Grocery();
-		grocery2.productId = 2;
-		grocery2.productName = "biscuit";
-		grocery2.productPrice = 10;
+		Grocery grocery2 = new Grocery(2,"biscuits",10);
 		groceryList.add(grocery2);
-		Grocery grocery3 = new Grocery();
-		grocery3.productId = 3;
-		grocery3.productName = "milk";
-		grocery3.productPrice = 20;
+		Grocery grocery3 = new Grocery(3,"milk",20);
 		groceryList.add(grocery3);
 		ArrayList<GroceryOrder> groceryOrderList = new ArrayList<GroceryOrder>();
 		GroceryOrder groceryOrderModel = new GroceryOrder();
@@ -75,16 +70,28 @@ public class App {
 		int choice = 0;
 		while(open) {
 			System.out.println("1. Customer\n2. Delivery Partner\n3. Restaurant partner\n4. Close app");
+			Action action = Action.DEFAULT;
 			try {
 			choice = sc.nextInt();
+			Action actions[] = Action.values();
+			for(Action a : actions) {
+				if(choice == a.ordinal()+1) {
+					action = a;
+					break;
+				}
+			}
 			}catch (Exception e) {
 				System.out.println("Something's wrong.");
 				sc.nextLine();
 			}
-			switch(choice) {
-			case 1: // CUSTOMER
+			switch(action) {
+			case CUSTOMER: // CUSTOMER
+				Customer customerModel = null;
+				CustomerView customerView;
 				boolean customerLogged = false;
-				System.out.println("1. Login\n2. Signup");
+				boolean back = false; 
+				while(!back) {
+				System.out.println("1. Login\n2. Signup\n3. Back");
 				choice = sc.nextInt();
 				sc.nextLine();
 				switch(choice) {
@@ -99,6 +106,7 @@ public class App {
 						String password = sc.nextLine();
 						if(customerController.getCustomerPassword().equals(password)) {
 							System.out.println("Logged in");
+							back = true;
 							customerLogged = true;
 						}else {
 							System.out.println("Invalid password. Try again");
@@ -108,7 +116,6 @@ public class App {
 						System.out.println("Email ID does not exists. Try again.");
 						break;
 					}
-					
 					break;
 				case 2: // CUSTOMER SIGNUP
 					customerModel = new Customer();
@@ -150,14 +157,19 @@ public class App {
 						customerDetails.put(customerController.getCustomerEmail(), customerModel);
 						customerController.updateView();
 						System.out.println("Signed up");
+						back = true;
 						customerLogged = true;
 					}else {
 						System.out.println("Try again.");
 					}
 					break;
+				case 3:
+					back = true;
+					break;
 				default:
 					System.out.println("Invalid option");
 					break;
+				}
 				}
 				while(customerLogged) {
 					System.out.println("1. Order food\n2. Order groceries\n3. Buy membership\n4. View profile\n5. Logout");
@@ -386,7 +398,7 @@ public class App {
 					}
 				}
 				break;
-			case 2: // DELIVERY PARTNER
+			case DELIVERYPARTNER: // DELIVERY PARTNER
 				boolean deliveryPartnerLogged = false;
 				System.out.println("1. Login\n2. Signup");
 				choice = sc.nextInt();
@@ -555,7 +567,7 @@ public class App {
 					}
 				}
 				break;
-			case 3: // RESTAURANT PARTNER
+			case RESTAURANT: // RESTAURANT PARTNER
 				boolean restaurantLogged = false;
 				System.out.println("1. Login\n2. Register");
 				choice = sc.nextInt();
@@ -713,7 +725,7 @@ public class App {
 					}
 				}
 				break;
-			case 4: // CLOSE APP
+			case CLOSEAPP: // CLOSE APP
 				System.out.println("App closed");
 				open = false;
 				break;
