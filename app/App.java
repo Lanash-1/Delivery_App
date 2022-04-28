@@ -29,16 +29,39 @@ import restaurant.RestaurantPartner;
 import restaurant.RestaurantPartnerController;
 import restaurant.RestaurantPartnerView;
 
-public class App {
-	enum Action{
-		CUSTOMER,DELIVERYPARTNER,RESTAURANT,CLOSEAPP,DEFAULT
-	}
+public class App {	
+	
+	public static final int CUSTOMER = 1;
+	public static final int DELIVERYPARTNER = 2;
+	public static final int RESTAURANTPARTNER = 3;
+	public static final int CLOSEAPP = 4;
+	public static final int LOGIN = 1;
+	public static final int SIGNUP = 2;
+	public static final int VIEWPROFILE = 4;
+	public static final int LOGOUT = 5;
+	public static final int BACK = 3;
+	public static final int FOODORDER = 1;
+	public static final int GROCERYORDER = 2;
+	public static final int PAYNOW = 1;
+	public static final int CASHONDELIVERY = 2;
+	public static final int BUYMEMBERSHIP = 3;
+	public static final int PRO = 1;
+	public static final int GOLD = 2;
+	public static final int CARD = 1;
+	public static final int UPI = 2;
+	public static final int ACCEPT = 1;
+	public static final int CANCEL = 2;
+	public static final int WITHDRAW = 3;
+	public static final int VIEWORDER = 1;
+	public static final int VIEWMENU = 3;
+	public static final int ADDOREDITMENU = 2;
+	public static final int EDIT = 2;
+	public static final int REMOVE = 1;
+	public static final int ADD = 1;
 	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		HashMap<String, Customer> customerDetails = new HashMap<String, Customer>();
-//		Customer customerModel = null;
-//		CustomerView customerView;
 		CustomerController customerController = null;
 		HashMap<String, DeliveryPartner> deliveryPartnerDetails = new HashMap<String, DeliveryPartner>();
 		DeliveryPartner deliveryModel;
@@ -70,21 +93,13 @@ public class App {
 		int choice = 0;
 		while(open) {
 			System.out.println("1. Customer\n2. Delivery Partner\n3. Restaurant partner\n4. Close app");
-			Action action = Action.DEFAULT;
 			try {
 			choice = sc.nextInt();
-			Action actions[] = Action.values();
-			for(Action a : actions) {
-				if(choice == a.ordinal()+1) {
-					action = a;
-					break;
-				}
-			}
 			}catch (Exception e) {
 				System.out.println("Something's wrong.");
 				sc.nextLine();
 			}
-			switch(action) {
+			switch(choice) {
 			case CUSTOMER: // CUSTOMER
 				Customer customerModel = null;
 				CustomerView customerView;
@@ -95,7 +110,7 @@ public class App {
 				choice = sc.nextInt();
 				sc.nextLine();
 				switch(choice) {
-				case 1: // CUSTOMER LOGIN
+				case LOGIN: // CUSTOMER LOGIN
 					System.out.print("Enter Email ID: ");
 					String emailId = sc.nextLine();
 					if(customerDetails.containsKey(emailId)) {
@@ -117,7 +132,7 @@ public class App {
 						break;
 					}
 					break;
-				case 2: // CUSTOMER SIGNUP
+				case SIGNUP: // CUSTOMER SIGNUP
 					customerModel = new Customer();
 					customerView = new CustomerView();
 					customerController = new CustomerController(customerModel, customerView);
@@ -163,7 +178,7 @@ public class App {
 						System.out.println("Try again.");
 					}
 					break;
-				case 3:
+				case BACK:
 					back = true;
 					break;
 				default:
@@ -175,7 +190,7 @@ public class App {
 					System.out.println("1. Order food\n2. Order groceries\n3. Buy membership\n4. View profile\n5. Logout");
 					choice = sc.nextInt();
 					switch(choice) {
-					case 1: // ORDER FOOD
+					case FOODORDER: // ORDER FOOD
 						if(restaurant.size() == 0) {
 							System.out.println("no restaurants available.");
 							break;
@@ -215,14 +230,14 @@ public class App {
 						System.out.println("1. Pay now\n2. Cash on delivery");
 						choice = sc.nextInt();
 						switch(choice) {
-						case 1: // PAY NOW
+						case PAYNOW: // PAY NOW
 							sc.nextLine();
 							System.out.println("1. Pay using card\n2. Pay using upi");
 							choice = sc.nextInt();
 							sc.nextLine();
 							PaymentMethod method;
 							switch(choice) {
-							case 1:
+							case CARD:
 								System.out.print("Enter card number: ");
 								String cardNumber = sc.nextLine();
 								method = new Card();
@@ -233,7 +248,7 @@ public class App {
 								restaurantController.setOrders(foodOrders);
 								System.out.println("Order placed");
 								break;
-							case 2:
+							case UPI:
 								System.out.print("Enter UPI Id: ");
 								String UpiId = sc.nextLine();
 								method = new Upi();
@@ -248,7 +263,7 @@ public class App {
 								System.out.println("Select valid payment option");
 							}
 							break;
-						case 2: // CASH ON DELIVERY
+						case CASHONDELIVERY: // CASH ON DELIVERY
 							foodOrderController.setPaid(false);
 							foodOrders = restaurantController.getOrders();
 							foodOrders.add(foodOrderModel);
@@ -259,7 +274,7 @@ public class App {
 							System.out.println("Invalid option. Order Again");
 						}
 						break;
-					case 2: // ORDER GROCERIES
+					case GROCERYORDER: // ORDER GROCERIES
 						for(Grocery item : groceryList) {
 							System.out.println(item.productId+". "+item.productName+" - "+item.productPrice);
 						}
@@ -286,14 +301,14 @@ public class App {
 						System.out.println("1. Pay now\n2. Cash on delivery");
 						choice = sc.nextInt();
 						switch(choice) {
-						case 1: // PAY NOW
+						case PAYNOW: // PAY NOW
 							sc.nextLine();
 							System.out.println("1. Pay using card\n2. Pay using upi");
 							choice = sc.nextInt();
 							sc.nextLine();
 							PaymentMethod method;
 							switch(choice) {
-							case 1:
+							case CARD:
 								System.out.print("Enter card number: ");
 								String cardNumber = sc.nextLine();
 								method = new Card();
@@ -302,7 +317,7 @@ public class App {
 								groceryOrderList.add(groceryOrderModel);
 								System.out.println("Order placed");
 								break;
-							case 2:
+							case UPI:
 								System.out.print("Enter UPI Id: ");
 								String UpiId = sc.nextLine();
 								method = new Upi();
@@ -315,7 +330,7 @@ public class App {
 								System.out.println("Select valid payment option");
 							}
 							break;
-						case 2: // CASH ON DELIVERY
+						case CASHONDELIVERY: // CASH ON DELIVERY
 							groceryOrderController.setPaid(false);
 							groceryOrderList.add(groceryOrderModel);
 							System.out.println("Order placed");
@@ -324,7 +339,7 @@ public class App {
 							System.out.println("Invalid option. Order Again");
 						}
 						break;
-					case 3: // BUY MEMBERSHIP
+					case BUYMEMBERSHIP: // BUY MEMBERSHIP
 						if(customerController.isMember()) {
 							System.out.println("Already a member");
 							break;
@@ -334,12 +349,12 @@ public class App {
 						System.out.println("1. PRO Membership\n2. GOLD Membership");
 						choice = sc.nextInt();
 						switch(choice) {
-						case 1: // PRO MEMBERSHIP
+						case PRO: // PRO MEMBERSHIP
 							membership = new ProMembership();
 							subscription = new Subscription(membership);
 							subscription.subscribe();
 							break;
-						case 2: // GOLD MEMBERSHIP
+						case GOLD: // GOLD MEMBERSHIP
 							membership = new GoldMembership();
 							subscription = new Subscription(membership);
 							subscription.subscribe();
@@ -352,13 +367,13 @@ public class App {
 							System.out.println("1. Pay and subcribe\n2. cancel");
 							choice = sc.nextInt();
 							switch(choice) {
-							case 1:
+							case PAYNOW:
 								System.out.println("1. Pay using card\n2. Pay using upi");
 								choice = sc.nextInt();
 								sc.nextLine();
 								PaymentMethod method;
 								switch(choice) {
-								case 1:
+								case CARD: // CARD
 									System.out.print("Enter card number: ");
 									String cardNumber = sc.nextLine();
 									method = new Card();
@@ -367,7 +382,7 @@ public class App {
 									customerController.setMember(true);
 									customerController.updateView();
 									break;
-								case 2:
+								case UPI: // UPI
 									System.out.print("Enter UPI Id: ");
 									String UpiId = sc.nextLine();
 									method = new Upi();
@@ -380,16 +395,16 @@ public class App {
 									System.out.println("Select valid payment option");
 								}
 								break;
-							case 2:
+							case CANCEL:
 								System.out.println("Cancelled");
 								break;
 							}
 						}
 						break;
-					case 4: // VIEW PROFILE
+					case VIEWPROFILE: // VIEW PROFILE
 						customerController.updateView();
 						break;
-					case 5: // LOGOUT
+					case LOGOUT: // LOGOUT
 						customerLogged = false;
 						System.out.println("Signed out.");
 						break;
@@ -404,7 +419,7 @@ public class App {
 				choice = sc.nextInt();
 				sc.nextLine();
 				switch(choice) {
-				case 1: // DELIVERY PARTNER LOGIN
+				case LOGIN: // DELIVERY PARTNER LOGIN
 					System.out.print("Enter Email ID: ");
 					String emailId = sc.nextLine();
 					if(deliveryPartnerDetails.containsKey(emailId)) {
@@ -425,7 +440,7 @@ public class App {
 						break;
 					}
 					break;
-				case 2: // DELIVERY PARTNER SIGNUP
+				case SIGNUP: // DELIVERY PARTNER SIGNUP
 					deliveryModel = new DeliveryPartner();
 					deliveryView = new DeliveryPartnerView();
 					deliveryController = new DeliveryPartnerController(deliveryModel, deliveryView);
@@ -477,10 +492,10 @@ public class App {
 					break;
 				}
 				while(deliveryPartnerLogged) {
-					System.out.println("1.View Food order\n2. View Grocery Order\n3. View Profile\n4. Withdraw Earnings\n5. logout");
+					System.out.println("1.View Food order\n2. View Grocery Order\n3. Withdraw Earnings\n4. View Profile\n5. logout");
 					choice = sc.nextInt();
 					switch(choice) {
-					case 1: // VIEW FOOD ORDER TO DELIVER
+					case FOODORDER: // VIEW FOOD ORDER TO DELIVER
 						if(foodOrdersToDeliver.size() > 0) {
 							foodOrderModel = foodOrdersToDeliver.get(0);
 							foodOrderView = new FoodOrderInfoView();
@@ -489,7 +504,7 @@ public class App {
 							System.out.println("1. Accept order\n2. Cancel order");
 							choice = sc.nextInt();
 							switch(choice) {
-							case 1:
+							case ACCEPT:
 								System.out.println("Order pickedUp");
 								if(!foodOrderController.isPaid()) {
 									System.out.println("Amount collected");
@@ -501,7 +516,7 @@ public class App {
 								foodOrdersToDeliver.remove(0);
 								deliveryController.setPartnerEarnings(deliveryController.getPartnerEarnings() + ((foodOrderController.getTotalBill())*10)/100);
 								break;
-							case 2:
+							case CANCEL:
 								System.out.println("Skipped order");
 								break;
 							default:
@@ -511,7 +526,7 @@ public class App {
 							System.out.println("No orders to deliver");
 						}
 						break;
-					case 2: // VIEW GROCERY ORDER
+					case GROCERYORDER: // VIEW GROCERY ORDER
 						if(groceryOrderList.size() > 0) {
 							groceryOrderModel = groceryOrderList.get(0);
 							groceryOrderController = new GroceryOrderController(groceryOrderModel, groceryOrderView);
@@ -519,7 +534,7 @@ public class App {
 							System.out.println("1. Accept order\n2. Cancel order");
 							choice = sc.nextInt();
 							switch(choice) {
-							case 1:
+							case ACCEPT:
 								System.out.println("Order pickedUp");
 								if(!groceryOrderController.isPaid()) {
 									System.out.println("Amount collected");
@@ -531,7 +546,7 @@ public class App {
 								groceryOrderList.remove(0);
 								deliveryController.setPartnerEarnings(deliveryController.getPartnerEarnings() + ((groceryOrderController.getTotalBill())*5)/100);
 								break;
-							case 2:
+							case CANCEL:
 								System.out.println("Skipped order");
 								break;
 							default:
@@ -541,10 +556,10 @@ public class App {
 							System.out.println("No orders to deliver");
 						}
 						break;
-					case 3: // VIEW PROFILE
+					case VIEWPROFILE: // VIEW PROFILE
 						deliveryController.updateView();
 						break;
-					case 4: // WITHDRAW EARNINGS
+					case WITHDRAW: // WITHDRAW EARNINGS
 						System.out.println("Available amount: " + deliveryController.getPartnerEarnings());
 						System.out.print("Enter amount to withdraw: ");
 						int amount = sc.nextInt();
@@ -558,7 +573,7 @@ public class App {
 							System.out.println("Requested amount is more than available earnings");
 						}
 						break;
-					case 5: // DELIVERY PARTNER LOGOUT
+					case LOGOUT: // DELIVERY PARTNER LOGOUT
 						deliveryPartnerLogged = false;
 						System.out.println("Signed out.");
 						break;
@@ -567,13 +582,13 @@ public class App {
 					}
 				}
 				break;
-			case RESTAURANT: // RESTAURANT PARTNER
+			case RESTAURANTPARTNER: // RESTAURANT PARTNER
 				boolean restaurantLogged = false;
 				System.out.println("1. Login\n2. Register");
 				choice = sc.nextInt();
 				sc.nextLine();
 				switch(choice) {
-				case 1: // RESTAURANT LOGIN
+				case LOGIN: // RESTAURANT LOGIN
 					System.out.print("Enter Restaurant EmailId: ");
 					String restaurantEmailId = sc.nextLine();
 					if(restaurantDetails.containsKey(restaurantEmailId)) {
@@ -594,7 +609,7 @@ public class App {
 						break;
 					}
 					break;
-				case 2: // RESTAURANT SIGNUP
+				case SIGNUP: // RESTAURANT SIGNUP
 					restaurantModel = new RestaurantPartner();
 					restaurantView = new RestaurantPartnerView();
 					restaurantController = new RestaurantPartnerController(restaurantModel, restaurantView);
@@ -644,10 +659,10 @@ public class App {
 					System.out.println("Invalid option");
 				}
 				while(restaurantLogged) {
-					System.out.println("1. View Orders\n2. Add/Edit menu\n3. View Profile\n4. View Menu\n5. Logout");
+					System.out.println("1. View Orders\n2. Add/Edit menu\n3. View Menu\n4. View Profile\n5. Logout");
 					choice = sc.nextInt();
 					switch(choice) {
-					case 1: // VIEW ORDER
+					case VIEWORDER: // VIEW ORDER
 						restaurantController.viewOrder();
 						if(restaurantController.getOrders().size() > 0) {							
 							sc.nextLine();
@@ -661,14 +676,14 @@ public class App {
 							restaurantController.setOrders(foodOrders);
 						}
 						break;
-					case 2: // ADD OR EDIT MENU
+					case ADDOREDITMENU: // ADD OR EDIT MENU
 						FoodItem food;
 						ArrayList<FoodItem> menu = restaurantController.getRestaurantMenu();
 						System.out.println("1. Add item\n2. Edit item");
 						choice = sc.nextInt();
 						sc.nextLine();
 						switch(choice) {
-						case 1: //  ADD FOOD
+						case ADD: //  ADD FOOD
 							food = new FoodItem();
 							System.out.print("Enter food name: ");
 							food.foodName = sc.nextLine();
@@ -679,17 +694,17 @@ public class App {
 							restaurantController.setRestaurantMenu(menu);
 							restaurantController.viewMenu();
 							break;
-						case 2: // EDIT FOOD
+						case EDIT: // EDIT FOOD
 							restaurantController.viewMenu();
 							System.out.println("Select food to edit");
 							int item = sc.nextInt();
 							if(item > menu.size()) {
 								System.out.println("Item not available.");
 							}
-							System.out.println("1. edit item\n2. remove item");
+							System.out.println("1. Remove item\n2. Edit item");
 							choice = sc.nextInt();
 							switch(choice) {
-							case 1: // EDIT ITEM
+							case EDIT: // EDIT ITEM
 								sc.nextLine();
 								System.out.print("Enter food name: ");
 								menu.get(item-1).foodName = sc.nextLine();
@@ -697,7 +712,7 @@ public class App {
 								menu.get(item-1).foodCost = sc.nextInt();
 								sc.nextLine();
 								break;
-							case 2: // REMOVE ITEM
+							case REMOVE: // REMOVE ITEM
 								menu.remove(item-1);
 								break;
 							default:
@@ -710,13 +725,13 @@ public class App {
 							System.out.println("Invalid option");
 						}
 						break;
-					case 3: // VIEW PROFILE
+					case VIEWPROFILE: // VIEW PROFILE
 						restaurantController.updateView();
 						break;
-					case 4: // VIEW MENU
+					case VIEWMENU: // VIEW MENU
 						restaurantController.viewMenu();
 						break;
-					case 5: // LOGOUT
+					case LOGOUT: // LOGOUT
 						restaurantLogged = false;
 						System.out.println("logged out");
 						break;
