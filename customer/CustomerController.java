@@ -3,11 +3,8 @@ package customer;
 import java.io.IOException;
 
 import customer.membership.Membership;
-import validation.DetailsVerification;
-import validation.EmailAndPasswordVerification;
-import validation.GenerateOtp;
 
-public class CustomerController extends GenerateOtp implements EmailAndPasswordVerification, DetailsVerification{
+public class CustomerController{
 	private Customer model;  
 	private CustomerView view;  
 	 
@@ -76,41 +73,23 @@ public class CustomerController extends GenerateOtp implements EmailAndPasswordV
 		}
 	}
 
-	public boolean validate(String email) {
-		if(email.endsWith("@gmail.com") && email.length() > 10) {
-			return true;
-		}
-		System.out.println("Enter valid email id");
-		return false;
-	}
-
-	public boolean validate(int generatedOtp, int enteredOtp) {
-		if(generatedOtp == enteredOtp) {
-			System.out.println("Verified");
-			return true;
-		}
-		System.out.println("Entered otp is not matching. Try again");
-		return false;
-	}
-
-	public boolean validate(String password, String rePassword) {
-		if(password.length() < 4){
-			view.viewMessage("Password too short. Should atleast 4 characters", "\u001B[31m");
+	public boolean getCustomerInfo() {
+		view.getCustomerName();
+		view.getPassword();
+		model.setCustomerPassword(view.password);
+		if(model.verifyPassword(model.getCustomerPassword(), view.repassword)) {
+			view.getCustomerInfo();
+			model.setCustomerAddress(view.address);
+			model.setCustomerName(view.customerName);
+			model.setCustomerNumber(view.mobileNumber);
+			if(model.verifyCustomerInfo(model.getCustomerName(), model.getCustomerNumber(), model.getCustomerAddress())) {
+				return true;
+			}else {
+				return false;
+			}
+		}else {
 			return false;
 		}
-		if(password.equals(rePassword)) {
-			System.out.println("Password Matching. Continue signup.");
-			return true;
-		}
-		view.viewMessage("Password not matching. Try again", "\u001B[31m");
-		return false;
-	}
-	
-	public boolean validate(String name, String mobileNumber, String location) {
-		if(location.length() < 1 || mobileNumber.length()!=10 || name.length() < 1) {
-			System.out.println("Enter details properly");
-			return false;
-		}
-		return true;
+		
 	}
 }

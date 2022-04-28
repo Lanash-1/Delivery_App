@@ -28,6 +28,8 @@ import restaurant.FoodItem;
 import restaurant.RestaurantPartner;
 import restaurant.RestaurantPartnerController;
 import restaurant.RestaurantPartnerView;
+import validation.GenerateOtp;
+import validation.ValidationUtility;
 
 public class App {	
 	
@@ -98,6 +100,7 @@ public class App {
 			}catch (Exception e) {
 				System.out.println("Something's wrong.");
 				sc.nextLine();
+				choice = 0;
 			}
 			switch(choice) {
 			case CUSTOMER: // CUSTOMER
@@ -107,8 +110,14 @@ public class App {
 				boolean back = false; 
 				while(!back) {
 				System.out.println("1. Login\n2. Signup\n3. Back");
-				choice = sc.nextInt();
-				sc.nextLine();
+				try {
+					choice = sc.nextInt();
+					sc.nextLine();
+				}catch(Exception error) {
+					System.out.println("Somethings wrong");
+					choice = 0;
+					sc.nextLine();
+				}
 				switch(choice) {
 				case LOGIN: // CUSTOMER LOGIN
 					System.out.print("Enter Email ID: ");
@@ -142,38 +151,45 @@ public class App {
 						System.out.println("Email Id exists already. Login to continue");
 						break;
 					}
-					if(customerController.validate(customerController.getCustomerEmail())) {
+					if(ValidationUtility.emailVerification(customerController.getCustomerEmail())) {
 						System.out.println("Otp sent to your email id");
-						int generatedOtp = customerController.generateOtp();
+						int generatedOtp = GenerateOtp.generateOtp();
 						System.out.println("OTP: " + generatedOtp);
 						System.out.print("Enter otp to verify: ");
 						int enteredOtp = sc.nextInt();
-						if(!customerController.validate(generatedOtp, enteredOtp)) {
+						if(!ValidationUtility.otpVerification(generatedOtp, enteredOtp)) {
 							break;
 						}
 					}else {
 						break;
 					}
 					sc.nextLine();
-					System.out.print("Create Username: ");
-					customerController.setCustomerName(sc.nextLine());
-					System.out.print("Create Password: ");
-					customerController.setCustomerPassword(sc.nextLine());
-					System.out.println("Re-Enter Password: ");
-					String rePassword = sc.nextLine();
-					if(!customerController.validate(customerController.getCustomerPassword(), rePassword)) {
-						break;
-					}
-					System.out.print("Enter address: ");
-					customerController.setCustomerAddress(sc.nextLine());
-					System.out.print("Enter mobile number: ");
-					customerController.setCustomerNumber(sc.nextLine());
-					if(customerController.validate(customerController.getCustomerName(), customerController.getCustomerNumber(),customerController.getCustomerAddress())) {
+//					System.out.print("Create Username: ");
+//					customerController.setCustomerName(sc.nextLine());
+//					System.out.print("Create Password: ");
+//					customerController.setCustomerPassword(sc.nextLine());
+//					System.out.println("Re-Enter Password: ");
+//					String rePassword = sc.nextLine();
+//					if(!ValidationUtility.passwordVerification(customerController.getCustomerPassword(), rePassword)) {
+//						break;
+//					}
+//					System.out.print("Enter address: ");
+//					customerController.setCustomerAddress(sc.nextLine());
+//					System.out.print("Enter mobile number: ");
+//					customerController.setCustomerNumber(sc.nextLine());
+					if(customerController.getCustomerInfo()) {
 						customerDetails.put(customerController.getCustomerEmail(), customerModel);
 						customerController.updateView();
 						System.out.println("Signed up");
 						back = true;
 						customerLogged = true;
+//					}
+//					if(ValidationUtility.customerVerification(customerController.getCustomerName(), customerController.getCustomerNumber(),customerController.getCustomerAddress())) {
+//						customerDetails.put(customerController.getCustomerEmail(), customerModel);
+//						customerController.updateView();
+//						System.out.println("Signed up");
+//						back = true;
+//						customerLogged = true;
 					}else {
 						System.out.println("Try again.");
 					}
@@ -415,7 +431,9 @@ public class App {
 				break;
 			case DELIVERYPARTNER: // DELIVERY PARTNER
 				boolean deliveryPartnerLogged = false;
-				System.out.println("1. Login\n2. Signup");
+				back = false;
+				while(!back) {
+				System.out.println("1. Login\n2. Signup\n3. back");
 				choice = sc.nextInt();
 				sc.nextLine();
 				switch(choice) {
@@ -431,6 +449,7 @@ public class App {
 						if(deliveryController.getPartnerPassword().equals(password)) {
 							System.out.println("Logged in");
 							deliveryPartnerLogged = true;
+							back = true;
 						}else {
 							System.out.println("Invalid password. Try again");
 							break;
@@ -450,13 +469,13 @@ public class App {
 						System.out.println("Email Id exists already. Login to continue");
 						break;
 					}
-					if(deliveryController.validate(deliveryController.getPartnerEmail())) {
+					if(ValidationUtility.emailVerification(deliveryController.getPartnerEmail())) {
 						System.out.println("Otp sent to your email id");
-						int generatedOtp = deliveryController.generateOtp();
+						int generatedOtp = GenerateOtp.generateOtp();
 						System.out.println("OTP: " + generatedOtp);
 						System.out.print("Enter otp to verify: ");
 						int enteredOtp = sc.nextInt();
-						if(!deliveryController.validate(generatedOtp, enteredOtp)) {
+						if(!ValidationUtility.otpVerification(generatedOtp, enteredOtp)) {
 							break;
 						}
 					}else {
@@ -469,7 +488,7 @@ public class App {
 					deliveryController.setPartnerPassword(sc.nextLine());
 					System.out.println("Re-Enter Password: ");
 					String rePassword = sc.nextLine();
-					if(!deliveryController.validate(deliveryController.getPartnerPassword(), rePassword)) {
+					if(!ValidationUtility.passwordVerification(deliveryController.getPartnerPassword(), rePassword)) {
 						break;
 					}
 					System.out.print("Enter Name: ");
@@ -478,18 +497,23 @@ public class App {
 					deliveryController.setPartnerMobileNumber(sc.nextLine());
 					System.out.print("Enter vehicle Reg no: ");
 					deliveryController.setPartnerVehicleNumber(sc.nextLine());
-					if(deliveryController.validate(deliveryController.getPartnerName(), deliveryController.getPartnerId(), deliveryController.getPartnerMobileNumber(), deliveryController.getPartnerVehicleNumber())) {
+					if(ValidationUtility.deliveryPartnerVerification(deliveryController.getPartnerName(), deliveryController.getPartnerId(), deliveryController.getPartnerMobileNumber(), deliveryController.getPartnerVehicleNumber())) {
 						deliveryPartnerDetails.put(deliveryController.getPartnerEmail(), deliveryModel);
 						deliveryController.updateView();
 						System.out.println("Signed up");
 						deliveryPartnerLogged = true;
+						back = true;
 					}else {
 						System.out.println("Try again.");
 					}
 					break;
+				case BACK:
+					back = true;
+					break;
 				default:
 					System.out.println("Invalid option");
 					break;
+				}
 				}
 				while(deliveryPartnerLogged) {
 					System.out.println("1.View Food order\n2. View Grocery Order\n3. Withdraw Earnings\n4. View Profile\n5. logout");
@@ -584,7 +608,10 @@ public class App {
 				break;
 			case RESTAURANTPARTNER: // RESTAURANT PARTNER
 				boolean restaurantLogged = false;
-				System.out.println("1. Login\n2. Register");
+				back = false;
+				while(!back) {
+					
+				System.out.println("1. Login\n2. Register\n3. back");
 				choice = sc.nextInt();
 				sc.nextLine();
 				switch(choice) {
@@ -600,6 +627,7 @@ public class App {
 						if(restaurantController.getRestaurantPassword().equals(password)) {
 							System.out.println("Logged in");
 							restaurantLogged = true;
+							back = true;
 						}else {
 							System.out.println("Invalid password. Try again");
 							break;
@@ -619,13 +647,13 @@ public class App {
 						System.out.println("Email Id exists already. Login to continue");
 						break;
 					}
-					if(restaurantController.validate(restaurantController.getRestaurantEmailId())) {
+					if(ValidationUtility.emailVerification(restaurantController.getRestaurantEmailId())) {
 						System.out.println("Otp sent to your email id");
-						int generatedOtp = restaurantController.generateOtp();
+						int generatedOtp = GenerateOtp.generateOtp();
 						System.out.println("OTP: " + generatedOtp);
 						System.out.print("Enter otp to verify: ");
 						int enteredOtp = sc.nextInt();
-						if(!restaurantController.validate(generatedOtp, enteredOtp)) {
+						if(!ValidationUtility.otpVerification(generatedOtp, enteredOtp)) {
 							break;
 						}
 					}else {
@@ -636,7 +664,7 @@ public class App {
 					restaurantController.setRestaurantPassword(sc.nextLine());
 					System.out.println("Re-Enter Password: ");
 					String rePassword = sc.nextLine();
-					if(!restaurantController.validate(restaurantController.getRestaurantPassword(), rePassword)) {
+					if(!ValidationUtility.passwordVerification(restaurantController.getRestaurantPassword(), rePassword)) {
 						break;
 					}
 					System.out.print("Enter Restaurant Name: ");
@@ -645,18 +673,23 @@ public class App {
 					restaurantController.setRestaurantMobileNumber(sc.nextLine());
 					System.out.print("Enter Restaurant Location: ");
 					restaurantController.setRestaurantLocation(sc.nextLine());
-					if(restaurantController.validate(restaurantController.getRestaurantName(), restaurantController.getRestaurantMobileNumber(), restaurantController.getRestaurantLocation())) {
+					if(ValidationUtility.restaurantVerification(restaurantController.getRestaurantName(), restaurantController.getRestaurantMobileNumber(), restaurantController.getRestaurantLocation())) {
 						restaurantDetails.put(restaurantController.getRestaurantEmailId(), restaurantModel);
 						restaurantController.updateView();
 						System.out.println("Signed up");
 						restaurant.add(restaurantModel);
 						restaurantLogged = true;
+						back = true;
 					}else {
 						System.out.println("Try again.");
 					}
 					break;
+				case 3:
+					back = true;
+					break;
 				default:
 					System.out.println("Invalid option");
+				}
 				}
 				while(restaurantLogged) {
 					System.out.println("1. View Orders\n2. Add/Edit menu\n3. View Menu\n4. View Profile\n5. Logout");

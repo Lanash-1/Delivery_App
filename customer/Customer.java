@@ -1,6 +1,7 @@
 package customer;
 
 import customer.membership.Membership;
+import validation.ValidationUtility;
 
 public class Customer {
 	private String customerName;
@@ -52,5 +53,12 @@ public class Customer {
 	}
 	public void setCustomerEmail(String customerEmail) {
 		this.customerEmail = customerEmail;
+	}
+	
+	public boolean verifyPassword(String password, String repassword) {
+		return ValidationUtility.passwordVerification(password, repassword);
+	}
+	public boolean verifyCustomerInfo(String name, String mobileNumber, String location) {
+		return ValidationUtility.customerVerification(name, mobileNumber, location);
 	}
 }

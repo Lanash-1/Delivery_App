@@ -6,10 +6,11 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import customer.membership.Membership;
+import validation.ValidationUtility;
 
 public class CustomerView {
-	public static final String ANSI_RESET = "\u001B[0m";
-	public static final String ANSI_COLOR = "\u001B[31m";
+	String customerName, password, repassword, mobileNumber, address;
+	Scanner sc = new Scanner(System.in);
 	
 	public void printCustomerDetails(String customerName, String customerNumber, String customerAddress, Membership membership, boolean isMember, String customerEmail) throws IOException {
 		File file = new File("customerProfile.txt");
@@ -34,14 +35,28 @@ public class CustomerView {
 		}
 		writer.close();
 		
-		Scanner sc = new Scanner(file);
-		while(sc.hasNextLine()) {
-			System.out.println(sc.nextLine());
+		Scanner read = new Scanner(file);
+		while(read.hasNextLine()) {
+			System.out.println(read.nextLine());
 		}
 	}
-	public void viewMessage(String message, String color) {
-//		ANSI_COLOR = color;
-		System.out.println(ANSI_COLOR+message+ANSI_RESET);
+	
+	public void getCustomerName() {
+		System.out.println("Create Username: ");
+		customerName = sc.nextLine();
 	}
 	
+	public void getCustomerInfo() {
+		System.out.print("Enter address: ");
+		address = sc.nextLine();
+		System.out.print("Enter mobile number: ");
+		mobileNumber = sc.nextLine();
+	}
+	
+	public void getPassword() {
+		System.out.println("Enter password: ");
+		password = sc.nextLine();
+		System.out.println("Re-Enter password: ");
+		repassword = sc.nextLine();
+	}
 }
