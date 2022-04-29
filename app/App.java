@@ -31,7 +31,7 @@ import restaurant.RestaurantPartnerView;
 import validation.GenerateOtp;
 import validation.ValidationUtility;
 
-public class App {	
+public class App {
 	
 	public static final int CUSTOMER = 1;
 	public static final int DELIVERYPARTNER = 2;

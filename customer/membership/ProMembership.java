@@ -5,7 +5,7 @@ public class ProMembership extends Membership{
 	public void setMembershipDetails() {
 		price = 100;
 		benefits = "Free delivery on all orders";
-		membershipType = "PRO";
+		membershipType = MembershipType.PRO;
 		membershipValidity = "1 month";
 	}
 	

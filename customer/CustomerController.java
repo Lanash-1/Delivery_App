@@ -74,8 +74,9 @@ public class CustomerController{
 	}
 
 	public boolean getCustomerInfo() {
-		view.getCustomerName();
-		view.getPassword();
+		view.getCustomerDetails();
+//		view.getCustomerName();
+//		view.getPassword();
 		model.setCustomerPassword(view.password);
 		if(model.verifyPassword(model.getCustomerPassword(), view.repassword)) {
 			view.getCustomerInfo();

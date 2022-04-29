@@ -5,7 +5,7 @@ public class GoldMembership extends Membership{
 	public void setMembershipDetails() {
 		price = 900;
 		benefits = "Free delivery on all orders";
-		membershipType = "GOLD";
+		membershipType = MembershipType.GOLD;
 		membershipValidity = "12 months";
 	}
 	
