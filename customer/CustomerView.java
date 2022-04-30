@@ -41,22 +41,44 @@ public class CustomerView {
 		}
 	}
 	
-	public void getCustomerName() {
+	public boolean getCustomerDetails() {
 		System.out.println("Create Username: ");
 		customerName = sc.nextLine();
-	}
-	
-	public void getCustomerInfo() {
-		System.out.print("Enter address: ");
-		address = sc.nextLine();
-		System.out.print("Enter mobile number: ");
-		mobileNumber = sc.nextLine();
-	}
-	
-	public void getPassword() {
 		System.out.println("Enter password: ");
 		password = sc.nextLine();
 		System.out.println("Re-Enter password: ");
 		repassword = sc.nextLine();
+		if(ValidationUtility.passwordVerification(password, repassword)) {
+			System.out.print("Enter address: ");
+			address = sc.nextLine();
+			System.out.print("Enter mobile number: ");
+			mobileNumber = sc.nextLine();
+			if(ValidationUtility.customerVerification(customerName, mobileNumber, address)) {
+				return true;
+			}else {
+				return false;
+			}
+		}else {
+			return false;
+		}
 	}
+	
+//	public void getCustomerName() {
+//		System.out.println("Create Username: ");
+//		customerName = sc.nextLine();
+//	}
+	
+//	public void getCustomerInfo() {
+//		System.out.print("Enter address: ");
+//		address = sc.nextLine();
+//		System.out.print("Enter mobile number: ");
+//		mobileNumber = sc.nextLine();
+//	}
+	
+//	public void getPassword() {
+//		System.out.println("Enter password: ");
+//		password = sc.nextLine();
+//		System.out.println("Re-Enter password: ");
+//		repassword = sc.nextLine();
+//	}
 }

@@ -177,7 +177,7 @@ public class App {
 //					customerController.setCustomerAddress(sc.nextLine());
 //					System.out.print("Enter mobile number: ");
 //					customerController.setCustomerNumber(sc.nextLine());
-					if(customerController.getCustomerInfo()) {
+					if(customerController.getCustomerSignUpInfo()) {
 						customerDetails.put(customerController.getCustomerEmail(), customerModel);
 						customerController.updateView();
 						System.out.println("Signed up");
