@@ -163,33 +163,13 @@ public class App {
 					}else {
 						break;
 					}
-					sc.nextLine();
-//					System.out.print("Create Username: ");
-//					customerController.setCustomerName(sc.nextLine());
-//					System.out.print("Create Password: ");
-//					customerController.setCustomerPassword(sc.nextLine());
-//					System.out.println("Re-Enter Password: ");
-//					String rePassword = sc.nextLine();
-//					if(!ValidationUtility.passwordVerification(customerController.getCustomerPassword(), rePassword)) {
-//						break;
-//					}
-//					System.out.print("Enter address: ");
-//					customerController.setCustomerAddress(sc.nextLine());
-//					System.out.print("Enter mobile number: ");
-//					customerController.setCustomerNumber(sc.nextLine());
+					sc.nextLine();				
 					if(customerController.getCustomerSignUpInfo()) {
 						customerDetails.put(customerController.getCustomerEmail(), customerModel);
 						customerController.updateView();
 						System.out.println("Signed up");
 						back = true;
 						customerLogged = true;
-//					}
-//					if(ValidationUtility.customerVerification(customerController.getCustomerName(), customerController.getCustomerNumber(),customerController.getCustomerAddress())) {
-//						customerDetails.put(customerController.getCustomerEmail(), customerModel);
-//						customerController.updateView();
-//						System.out.println("Signed up");
-//						back = true;
-//						customerLogged = true;
 					}else {
 						System.out.println("Try again.");
 					}

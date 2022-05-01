@@ -84,23 +84,4 @@ public class CustomerController{
 			return false;
 		}
 	}
-//		view.getCustomerDetails();
-////		view.getCustomerName();
-////		view.getPassword();
-//		model.setCustomerPassword(view.password);
-//		if(model.verifyPassword(model.getCustomerPassword(), view.repassword)) {
-//			view.getCustomerInfo();
-//			model.setCustomerAddress(view.address);
-//			model.setCustomerName(view.customerName);
-//			model.setCustomerNumber(view.mobileNumber);
-//			if(model.verifyCustomerInfo(model.getCustomerName(), model.getCustomerNumber(), model.getCustomerAddress())) {
-//				return true;
-//			}else {
-//				return false;
-//			}
-//		}else {
-//			return false;
-//		}
-//		
-//	}
 }
