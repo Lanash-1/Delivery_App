@@ -274,6 +274,13 @@ public class App {
 						for(Grocery item : groceryList) {
 							System.out.println(item.productId+". "+item.productName+" - "+item.productPrice);
 						}
+						try {
+							Database db = new Database();
+							db.getFullData();
+						} catch (Exception e) {
+							System.out.println("DB error");
+							break;
+						}
 						System.out.println("Select grocery");
 						int selectedGrocery = sc.nextInt();
 						sc.nextLine();
