@@ -17,6 +17,7 @@ import foodorder.FoodOrderInfo;
 import foodorder.FoodOrderInfoController;
 import foodorder.FoodOrderInfoView;
 import groceryorder.Grocery;
+import groceryorder.GroceryDatabase;
 import groceryorder.GroceryOrder;
 import groceryorder.GroceryOrderController;
 import groceryorder.GroceryOrderView;
@@ -80,17 +81,10 @@ public class App {
 		FoodOrderInfoController foodOrderController;
 		ArrayList<FoodOrderInfo> foodOrdersToDeliver = new ArrayList<FoodOrderInfo>();
 		FoodOrderInfo foodToDeliver;
-		ArrayList<Grocery> groceryList = new ArrayList<Grocery>();
-		Grocery grocery1 = new Grocery(1,"chips",5);
-		groceryList.add(grocery1);
-		Grocery grocery2 = new Grocery(2,"biscuits",10);
-		groceryList.add(grocery2);
-		Grocery grocery3 = new Grocery(3,"milk",20);
-		groceryList.add(grocery3);
 		ArrayList<GroceryOrder> groceryOrderList = new ArrayList<GroceryOrder>();
-		GroceryOrder groceryOrderModel = new GroceryOrder();
-		GroceryOrderView groceryOrderView = new GroceryOrderView();
-		GroceryOrderController groceryOrderController = new GroceryOrderController(groceryOrderModel, groceryOrderView);
+		GroceryOrder groceryOrderModel;
+		GroceryOrderView groceryOrderView;
+		GroceryOrderController groceryOrderController;
 		boolean open = true;
 		int choice = 0;
 		while(open) {
@@ -271,23 +265,53 @@ public class App {
 						}
 						break;
 					case GROCERYORDER: // ORDER GROCERIES
-						for(Grocery item : groceryList) {
-							System.out.println(item.productId+". "+item.productName+" - "+item.productPrice);
-						}
+						groceryOrderModel = new GroceryOrder();
+						groceryOrderView = new GroceryOrderView();
+						groceryOrderController = new GroceryOrderController(groceryOrderModel, groceryOrderView);
+						System.out.println("");
+						GroceryDatabase groceryDb;
 						try {
-							Database db = new Database();
-							db.getFullData();
+							groceryDb = new GroceryDatabase();
+							groceryDb.getFullData();
 						} catch (Exception e) {
-							System.out.println("DB error");
+							System.out.println("DB ERROR: TRY AGAIN> :)");
 							break;
 						}
 						System.out.println("Select grocery");
-						int selectedGrocery = sc.nextInt();
+						int selectedGrocery;
+						try {
+							selectedGrocery = sc.nextInt();
+						}catch (Exception error) {
+							System.out.println("Enter a valid option");sc.nextLine();break;
+						}
+						try {
+							if(groceryDb.checkAvailable(selectedGrocery)) {
+								System.out.println("Success");
+							}else {
+								break;
+							}
+						} catch (Exception e1) {
+							System.out.println("DB ERROR:CANNOT SELECT> TRY AGAIN");
+							break;
+						}
 						sc.nextLine();
 						System.out.print("Enter quantity: ");
-						int groceryQuantity = sc.nextInt();
+						int groceryQuantity;
+						try {
+							groceryQuantity = sc.nextInt();
+		
+						}catch(Exception error) {
+							System.out.println("Quantity should be a number");
+							sc.nextLine();
+							break;
+						}
 						groceryOrderController.setCustomer(customerModel);
-						groceryOrderController.setGrocery(groceryList.get(selectedGrocery-1));
+						try {
+							groceryOrderController.setGrocery(groceryDb.getSelectedGrocery(selectedGrocery));
+						} catch (Exception e) {
+							System.out.println("DB ERROR. TRY AGAIN> :(");
+							break;
+						}
 						groceryOrderController.setQuantity(groceryQuantity);
 						int groceryBill = groceryOrderController.getGrocery().productPrice * groceryQuantity;
 						if(customerController.isMember()) {
@@ -540,6 +564,7 @@ public class App {
 					case GROCERYORDER: // VIEW GROCERY ORDER
 						if(groceryOrderList.size() > 0) {
 							groceryOrderModel = groceryOrderList.get(0);
+							groceryOrderView = new GroceryOrderView();
 							groceryOrderController = new GroceryOrderController(groceryOrderModel, groceryOrderView);
 							groceryOrderController.viewGroceryOrder();
 							System.out.println("1. Accept order\n2. Cancel order");
