@@ -1,10 +1,10 @@
 package groceryorder;
 import java.sql.*;
 
-public class GroceryDatabase {
-	private static final String url = "jdbc:mysql://localhost:3306/delivery_app";
-	private static final String uname = "root";
-	private static final String pass = "password";
+public class GroceryTable {
+	private static final String URL = "jdbc:mysql://localhost:3306/delivery_app";
+	private static final String USER_NAME = "root";
+	private static final String PASSWORD = "password";
 	
 	int groceryCount = 0;
 	
@@ -14,9 +14,9 @@ public class GroceryDatabase {
 	ResultSet rs;
 	PreparedStatement pst; 
 	
-	public GroceryDatabase() throws Exception{		
+	public GroceryTable() throws Exception{		
 		Class.forName("com.mysql.cj.jdbc.Driver");
-		con = DriverManager.getConnection(url, uname, pass);		
+		con = DriverManager.getConnection(URL, USER_NAME, PASSWORD);		
 	}
 	
 	public void getFullData() throws Exception{
@@ -28,17 +28,12 @@ public class GroceryDatabase {
 			System.out.println(rs.getInt(1) + ". " + rs.getString(2) + " - Rs." + rs.getInt(3));
 		}
 		st.close();
-//		con.close();
 	}
 	
 	public boolean checkAvailable(int selectedId) throws Exception{
-		System.out.println("FIrst line");
 		query = "select count(*) from GROCERY";
-		System.out.println("Second line");
 		st = con.createStatement();
-		System.out.println("third line");
 		rs = st.executeQuery(query);
-		System.out.println("FOurth line 0000");
 		rs.next();
 		groceryCount = rs.getInt(1);
 		if(groceryCount < selectedId || selectedId < 1) {

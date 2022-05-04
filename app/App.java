@@ -16,8 +16,7 @@ import deliverypartner.DeliveryPartnerView;
 import foodorder.FoodOrderInfo;
 import foodorder.FoodOrderInfoController;
 import foodorder.FoodOrderInfoView;
-import groceryorder.Grocery;
-import groceryorder.GroceryDatabase;
+import groceryorder.GroceryTable;
 import groceryorder.GroceryOrder;
 import groceryorder.GroceryOrderController;
 import groceryorder.GroceryOrderView;
@@ -29,6 +28,7 @@ import restaurant.FoodItem;
 import restaurant.RestaurantPartner;
 import restaurant.RestaurantPartnerController;
 import restaurant.RestaurantPartnerView;
+import restaurant.RestaurantTable;
 import validation.GenerateOtp;
 import validation.ValidationUtility;
 
@@ -269,9 +269,9 @@ public class App {
 						groceryOrderView = new GroceryOrderView();
 						groceryOrderController = new GroceryOrderController(groceryOrderModel, groceryOrderView);
 						System.out.println("");
-						GroceryDatabase groceryDb;
+						GroceryTable groceryDb;
 						try {
-							groceryDb = new GroceryDatabase();
+							groceryDb = new GroceryTable();
 							groceryDb.getFullData();
 						} catch (Exception e) {
 							System.out.println("DB ERROR: TRY AGAIN> :)");
@@ -299,7 +299,6 @@ public class App {
 						int groceryQuantity;
 						try {
 							groceryQuantity = sc.nextInt();
-		
 						}catch(Exception error) {
 							System.out.println("Quantity should be a number");
 							sc.nextLine();
@@ -688,6 +687,13 @@ public class App {
 					if(ValidationUtility.restaurantVerification(restaurantController.getRestaurantName(), restaurantController.getRestaurantMobileNumber(), restaurantController.getRestaurantLocation())) {
 						restaurantDetails.put(restaurantController.getRestaurantEmailId(), restaurantModel);
 						restaurantController.updateView();
+						try {
+							RestaurantTable restaurantDb = new RestaurantTable();
+							restaurantDb.setRestaurantDetails(restaurantController.getRestaurantEmailId(), restaurantController.getRestaurantPassword(), restaurantController.getRestaurantName(), restaurantController.getRestaurantLocation(), restaurantController.getRestaurantMobileNumber());
+						}catch(Exception error) {
+							System.out.println("Cannot upload to DB. TRY AGAIN");
+							break;
+						}
 						System.out.println("Signed up");
 						restaurant.add(restaurantModel);
 						restaurantLogged = true;
@@ -738,6 +744,13 @@ public class App {
 							menu.add(food);
 							restaurantController.setRestaurantMenu(menu);
 							restaurantController.viewMenu();
+							try {
+								RestaurantTable restaurantDb = new RestaurantTable();
+								restaurantDb.addFoodItem(restaurantController.getRestaurantName(), food.foodName, food.foodCost);
+							}catch(Exception error) {
+								System.out.println("Cannot upload to DB. TRY AGAIN");
+								break;
+							}
 							break;
 						case EDIT: // EDIT FOOD
 							restaurantController.viewMenu();
@@ -752,13 +765,29 @@ public class App {
 							case EDIT: // EDIT ITEM
 								sc.nextLine();
 								System.out.print("Enter food name: ");
-								menu.get(item-1).foodName = sc.nextLine();
+								String newFood = sc.nextLine();
+								menu.get(item-1).foodName = newFood;
 								System.out.print("Enter food cost: ");
-								menu.get(item-1).foodCost = sc.nextInt();
+								int newCost = sc.nextInt();
+								menu.get(item-1).foodCost = newCost;
 								sc.nextLine();
+								try {
+									RestaurantTable restaurantDb = new RestaurantTable();
+									restaurantDb.editMenu(restaurantController.getRestaurantName(), newFood, newCost, item);
+								}catch(Exception error) {
+									System.out.println("Cannot Edit to DB. TRY AGAIN");
+									break;
+								}
 								break;
 							case REMOVE: // REMOVE ITEM
 								menu.remove(item-1);
+								try {
+									RestaurantTable restaurantDb = new RestaurantTable();
+									restaurantDb.removeFoodItem(restaurantController.getRestaurantName(), item);
+								}catch(Exception error) {
+									System.out.println("Cannot delete from DB. TRY AGAIN");
+									break;
+								}
 								break;
 							default:
 								System.out.println("invalid option");
@@ -774,7 +803,14 @@ public class App {
 						restaurantController.updateView();
 						break;
 					case VIEWMENU: // VIEW MENU
-						restaurantController.viewMenu();
+//						restaurantController.viewMenu();
+						try {
+							RestaurantTable restaurantDb = new RestaurantTable();
+							restaurantDb.viewMenu(restaurantController.getRestaurantName());
+						}catch(Exception error) {
+							System.out.println("Menu not available. TRY AGAIN");
+							break;
+						}
 						break;
 					case LOGOUT: // LOGOUT
 						restaurantLogged = false;
