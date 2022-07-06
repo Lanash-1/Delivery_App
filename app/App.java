@@ -785,7 +785,7 @@ public class App {
 									RestaurantTable restaurantDb = new RestaurantTable();
 									restaurantDb.removeFoodItem(restaurantController.getRestaurantName(), item);
 								}catch(Exception error) {
-									System.out.println("Cannot delete from DB. TRY AGAIN");
+									System.out.println("Cannot delete from DB. TRY AGAIN!");
 									break;
 								}
 								break;
